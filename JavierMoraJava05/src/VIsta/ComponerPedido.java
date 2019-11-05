@@ -173,7 +173,9 @@ public class ComponerPedido extends javax.swing.JPanel {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         
-        System.out.println(jList1.getSelectedIndex());
+        int productoElegido=jList1.getSelectedIndex();
+        actualizarDatosProducto(productoElegido);
+        
         
     }//GEN-LAST:event_jList1MouseClicked
 
@@ -248,6 +250,41 @@ public class ComponerPedido extends javax.swing.JPanel {
     {
         cargarProductos();
         rellenarLista();
+    }
+
+    private void actualizarDatosProducto(int indiceElegido) 
+    {
+        Productos prodElegido;
+        float precioConIva;
+        float precioSinIva;
+        
+        /*si la lista de cadenas es mayor a 1 quiere decir que solo hay un producto
+        por tanto obtendremos un elemento del ArrayList*/  
+        if(cadenasProductos.length>1)
+        {
+            prodElegido=listaProductos.get(indiceElegido);
+            
+            jTextFieldNumeroProducto.setText(""+ prodElegido.getCodigoProducto());
+            
+            precioSinIva=prodElegido.getPrecioSinIva();
+            precioConIva=(float) (precioSinIva*1.21);
+            
+            jTextFieldPrecioIva.setText(""+precioConIva);
+        }
+        else
+        {
+            prodElegido=producto;
+            
+            jTextFieldNumeroProducto.setText(""+ prodElegido.getCodigoProducto());
+            
+            precioSinIva=prodElegido.getPrecioSinIva();
+            precioConIva=(float) (precioSinIva*1.21);
+            
+            jTextFieldPrecioIva.setText(""+precioConIva);
+            
+        }
+        
+        
     }
 
 }
