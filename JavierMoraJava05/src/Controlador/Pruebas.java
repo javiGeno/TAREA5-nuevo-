@@ -3,6 +3,8 @@ package Controlador;
 
 import Modelo.Composicion;
 import Modelo.ConsultasComposicion;
+import Modelo.ConsultasProductos;
+import Modelo.Productos;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ public class Pruebas {
         
         GestionarPedidos ge=new GestionarPedidos("hola");
         
-        ConsultasComposicion composiciones=new ConsultasComposicion(8);
+        /*ConsultasComposicion composiciones=new ConsultasComposicion(8);
         
         Object composicionesPedido=composiciones.obtenerResultadoSelectComposicion();
          
@@ -63,6 +65,36 @@ public class Pruebas {
             System.out.println(c.getProComposicion());
             System.out.println(c.getCantidad());
             System.out.println(c.getPrecioConIva());
+           
+        }*/
+        
+        ConsultasProductos productos=new ConsultasProductos();
+        
+        Object  pro= productos.obtenerResultadoSelectComposicion();
+         
+        if(pro instanceof ArrayList)
+        {
+            Iterator i=((ArrayList) pro).iterator();
+            Productos p;
+            
+            while(i.hasNext())
+            {
+                p=(Productos) i.next();
+                System.out.println(p.getCodigoProducto());
+                System.out.println(p.getPrecioSinIva());
+                System.out.println(p.getDescripcion());
+                System.out.println(p.getCategoria());
+            }
+            System.out.println("Aqui no debe entrar");
+        }
+        else
+        {
+            Productos p=(Productos) pro;
+            
+            System.out.println(p.getCodigoProducto());
+                System.out.println(p.getPrecioSinIva());
+                System.out.println(p.getDescripcion());
+                System.out.println(p.getCategoria());
            
         }
     }

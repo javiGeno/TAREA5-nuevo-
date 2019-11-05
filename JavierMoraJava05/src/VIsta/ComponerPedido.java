@@ -1,15 +1,32 @@
 
 package VIsta;
 
+import Modelo.ConsultasProductos;
+import Modelo.Productos;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
+
 
 public class ComponerPedido extends javax.swing.JPanel {
 
     private VentanaPrincipal venP;
+    private String[] cadenasProductos;
+    private ConsultasProductos consultaProductos;
+    private ArrayList<Productos> listaProductos;
+    private Productos producto;
+    
     
     public ComponerPedido(VentanaPrincipal p) {
         initComponents();
         
         venP=p;
+        
+        consultaProductos=new ConsultasProductos();
+        
+        
+        
     }
 
     
@@ -47,6 +64,11 @@ public class ComponerPedido extends javax.swing.JPanel {
 
         jLabel4.setText("Precio con IVA");
 
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jList1);
 
         jTextFieldNumeroPedido.setEditable(false);
@@ -141,13 +163,19 @@ public class ComponerPedido extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEfectuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEfectuarActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jButtonEfectuarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         
         venP.cambioDePanel(venP.getjPanelVerPedidos());
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        
+        System.out.println(jList1.getSelectedIndex());
+        
+    }//GEN-LAST:event_jList1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -165,4 +193,61 @@ public class ComponerPedido extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldNumeroProducto;
     private javax.swing.JTextField jTextFieldPrecioIva;
     // End of variables declaration//GEN-END:variables
+
+    public void actualizarDatosPedido(int numeroPedido, int cantidadArticulo)
+    {
+        jLabelCabecera.setText("Pedido: "+numeroPedido);
+        jTextFieldCantidadArticulos.setText(""+cantidadArticulo);
+        jTextFieldNumeroPedido.setText(""+numeroPedido);
+        jTextFieldNumeroProducto.setText("");
+        jTextFieldPrecioIva.setText("");
+    }
+
+    private void cargarProductos() 
+    {
+        
+        try
+        {
+            Object  pro= consultaProductos.obtenerResultadoSelectComposicion();
+
+            if(pro instanceof ArrayList)
+            {
+                listaProductos=(ArrayList<Productos>) pro;
+                //creamos un vector de cadenas con el tamaño de la lista, que sera lo que mostrara el jList
+                cadenasProductos=new String[listaProductos.size()];
+                
+                for(int i=0; i< listaProductos.size(); i++)
+                {
+                    //guardamos en cada posicion una cadena devuelta por el metodo toString de cada producto
+                    cadenasProductos[i]=listaProductos.get(i).toString();
+                }
+            }
+            else
+            {
+                producto=(Productos) pro;
+                //creamos un vector de una posicion en caso de que solo devuelva un elemento consultaProductos
+                cadenasProductos=new String[1];
+                //guardamos en la unica posicion del array la cadena devuelta por el metodo toString del producto
+                cadenasProductos[0]=producto.toString();
+            }
+        }
+        catch(SQLException e)
+        {
+            
+                
+        }
+    }
+
+    private void rellenarLista() 
+    {
+        jList1.setListData(cadenasProductos);
+    }
+    
+    
+    public void montarListaProductos()
+    {
+        cargarProductos();
+        rellenarLista();
+    }
+
 }

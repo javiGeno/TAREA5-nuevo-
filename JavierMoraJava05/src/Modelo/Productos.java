@@ -45,6 +45,11 @@ public class Productos {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
+
+    @Override
+    public String toString() {
+        return ">"+ codigoProducto +"   "+ descripcion + "   PRECIO sin iva: " + precioSinIva  ;
+    }
     
     
 }

@@ -3,13 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/Modelo/ConsultasComposicion.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/Controlador/Pruebas.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/Controlador/GestionarPedidos.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/VIsta/VentanaPrincipal.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/Controlador/GestionarOperaciones.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/VIsta/VisualizarComposiciones.java</file>
-            <file>file:/home/javier/Desktop/GIT/TareaJava05/JavierMoraJava05/src/VIsta/VisualizarPedidos.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/Modelo/Productos.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/VIsta/VisualizarPedidos.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/VIsta/VisualizarComposiciones.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/Controlador/CreacionStatement.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/Modelo/ConsultasComposicion.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/Controlador/GestionarPedidos.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/Modelo/ConsultasProductos.java</file>
+            <file>file:/home/javier/Desktop/GIT/JavierMoraJava05/src/VIsta/ComponerPedido.java</file>
         </group>
     </open-files>
 </project-private>

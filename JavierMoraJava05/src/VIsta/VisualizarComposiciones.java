@@ -15,7 +15,9 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
     private ArrayList<Composicion> composiciones;
     private Composicion composicion;
     private ConsultasComposicion resultadoComposiciones;
-    private  DefaultTableModel datosTabla;
+    private DefaultTableModel datosTabla;
+    ////contara filas que tiene la composicion del pedido, para sumarle uno en una insercción de una composición
+    private int cantidadComposiciones;
     
     public VisualizarComposiciones(VentanaPrincipal p) {
         initComponents();
@@ -24,6 +26,8 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
         datosTabla=(DefaultTableModel) jTable1.getModel();
         venP=p;
     }
+
+    
 
     
     @SuppressWarnings("unchecked")
@@ -119,11 +123,13 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
             {   
                    composiciones=new ArrayList();
                    composiciones=(ArrayList<Composicion>) composicionesPedido;
+                   cantidadComposiciones=composiciones.size();
             }
             else
             {
                    composicion=new Composicion();
                    composicion=(Composicion) composicionesPedido;
+                   cantidadComposiciones=1;
             }
         }
         catch(SQLException e)
@@ -134,6 +140,8 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
         
         
     }
+    
+    
     
     public void mostrarDatosTabla()
     {
@@ -177,5 +185,9 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
     public void resetTable()
     {
         datosTabla.setRowCount(0);
+    }
+    
+    public int getCantidadComposiciones() {
+        return cantidadComposiciones;
     }
 }

@@ -25,22 +25,17 @@ public class GestionarOperaciones {
         Statement statement=CreacionStatement.getUpdatableStatement();
         
         ResultSet resultado=statement.executeQuery(consulta);
+       
+        int numeroFilasConsulta=cantidadFilas(resultado);
         
-        if(cantidadFilas(resultado)>1)
+        if(numeroFilasConsulta>1)
         {
             ArrayList <Composicion> filasObtenidas = new ArrayList<Composicion>();
-            Composicion nueva;
-            int cont=0;
+            
             
             while(resultado.next())
             {
-                nueva=new Composicion();
-                
-                nueva.setPedComposicion(resultado.getInt(1));
-                nueva.setProComposicion(resultado.getInt(2));
-                nueva.setCantidad(resultado.getInt(3));
-                nueva.setPrecioConIva(resultado.getFloat(4));
-                
+                Composicion nueva=rellenaCompo(resultado);
                 
                 filasObtenidas.add(nueva);
                 
@@ -52,22 +47,88 @@ public class GestionarOperaciones {
         else
         {
               
-                Composicion filaObtenida = new Composicion();
+                Composicion filaObtenida;
 
                 resultado.first();
 
-                filaObtenida.setPedComposicion(resultado.getInt(1));
-                filaObtenida.setProComposicion(resultado.getInt(2));
-                filaObtenida.setCantidad(resultado.getInt(3));
-                filaObtenida.setPrecioConIva(resultado.getFloat(4));
-
-                System.out.println("Entrado en una fila");
+               
+                filaObtenida=rellenaCompo(resultado);
+               
 
                 return filaObtenida;
         }
         
         
         
+    }
+    
+    public static Object todosProductos(String consulta) throws SQLException
+    {
+        
+
+        Statement statement=CreacionStatement.getUpdatableStatement();
+        
+        ResultSet resultado=statement.executeQuery(consulta);
+        
+        int numeroFilasConsulta=cantidadFilas(resultado);
+        
+        if(numeroFilasConsulta>1)
+        {
+            ArrayList <Productos> filasObtenidas = new ArrayList<Productos>();
+            Productos nueva;
+            
+            
+            while(resultado.next())
+            {
+                Productos nuevo=rellenaProducto(resultado);
+                
+                filasObtenidas.add(nuevo);
+                
+            }
+            
+            return filasObtenidas;
+                
+        }
+        else
+        {
+              
+                Productos filaObtenida;
+
+                resultado.first();
+
+                filaObtenida=rellenaProducto(resultado);
+
+
+                return filaObtenida;
+        }
+        
+        
+        
+    }
+    
+    private static Productos rellenaProducto(ResultSet resultado) throws SQLException
+    {
+        Productos filaObtenida = new Productos();
+        
+        filaObtenida.setCodigoProducto(resultado.getInt(1));
+        filaObtenida.setPrecioSinIva(resultado.getFloat(2));
+        filaObtenida.setDescripcion(resultado.getString(3));
+        filaObtenida.setCategoria(resultado.getString(4));
+        
+        return filaObtenida;
+    }
+    
+   
+    private static Composicion rellenaCompo(ResultSet resultado) throws SQLException
+    {
+        Composicion filaObtenida = new Composicion();
+        
+        filaObtenida.setPedComposicion(resultado.getInt(1));
+        filaObtenida.setProComposicion(resultado.getInt(2));
+        filaObtenida.setCantidad(resultado.getInt(3));
+        filaObtenida.setPrecioConIva(resultado.getFloat(4));
+        
+        return filaObtenida;
     }
     
     private static int cantidadFilas(ResultSet result) throws SQLException 

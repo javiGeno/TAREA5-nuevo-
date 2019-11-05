@@ -3,6 +3,7 @@ package VIsta;
 
 import Controlador.*;
 import Modelo.Pedidos;
+import java.awt.Image;
 import java.awt.MediaTracker;
 import java.io.*;
 import java.nio.file.*;
@@ -237,6 +238,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         actualizarCampos();
         actualizarBotones();
         actualizar_imagen();
+        resetComposiciones();
     }//GEN-LAST:event_jButtonAtrasActionPerformed
 
     private void jButtonSigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSigActionPerformed
@@ -245,21 +247,25 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         actualizarCampos();
         actualizarBotones();
         actualizar_imagen();
+        resetComposiciones();
     }//GEN-LAST:event_jButtonSigActionPerformed
 
     private void jButtonAñadirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirProductoActionPerformed
 
         venP.cambioDePanel(venP.getjPanelComponerPedido());
 
+        int numPed=pedidoActual.getNumeroPedido();
+        //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
+        int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
+        venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
+        venP.getjPanelComponerPedido().montarListaProductos();
     }//GEN-LAST:event_jButtonAñadirProductoActionPerformed
 
     private void jButtonComposicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonComposicionActionPerformed
         
         
         venP.cambioDePanel(venP.getjPanelVerComposicion());
-        venP.getjPanelVerComposicion().resetTable();
-        venP.getjPanelVerComposicion().cargaComposiciones(pedidoActual.getNumeroPedido());
-        venP.getjPanelVerComposicion().mostrarDatosTabla();
+        
        
     }//GEN-LAST:event_jButtonComposicionActionPerformed
 
@@ -274,6 +280,8 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             //se coloca la imagen en el label pero sin guardarla en la carpeta aun
            String rutaOriginalImagen= jFileChooserImagen.getSelectedFile().getPath();
            ImageIcon imagenProvisional=new ImageIcon(rutaOriginalImagen);
+           imagenProvisional=readaptarImagen(imagenProvisional);
+           jLabelImagen.setText("");
            jLabelImagen.setIcon(imagenProvisional);
            imagenActualizada=true;
         }
@@ -332,7 +340,12 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         }
     }
         
-    
+    public void resetComposiciones()
+    {
+        venP.getjPanelVerComposicion().resetTable();
+        venP.getjPanelVerComposicion().cargaComposiciones(pedidoActual.getNumeroPedido());
+        venP.getjPanelVerComposicion().mostrarDatosTabla();
+    }
     
     public void reset()
     {
@@ -347,6 +360,8 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Pedidos no encontrado", "No tiene pedidos registrados", JOptionPane.WARNING_MESSAGE);
         }
        
+        //resetea el panel de las composiciones del pedido
+        resetComposiciones();
         
     }
 
@@ -373,18 +388,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
          }
     }                           
     
-    /*private void accesoAPedidos()
-    {
-        try
-        {
-            gestionPedidos=new GestionarPedidos(ConexionValidacion.getUsuario());//pasamos el usuario validado
-            System.out.println("hola hola");
-        }
-        catch(SQLException e)
-        {
-            
-        }
-    }*/
+    
     
     private void actualizarBotones()
     {
@@ -520,21 +524,26 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             {
                 //creamos una imagen icon a partir de la ruta que tiene el objeto 
                 ImageIcon imagenCarpeta=new ImageIcon(pedidoActual.getRutaFoto());
-
-
+                
+                
                 //si no hay imagenes en esa ruta, colocamos texto
                 if(imagenCarpeta.getImageLoadStatus()== MediaTracker.ERRORED)
                 {
                     //volvemos a poner el texto
+                    jLabelImagen.setIcon(null);
                     jLabelImagen.setText("no tiene foto");
+                   
 
                }
                else//si hay imagenes en esa ruta, actualizamos
                {
                     //borramos texto
                     jLabelImagen.setText("");
+                    //readaptamos imagen
+                    imagenCarpeta=readaptarImagen(imagenCarpeta);
                     //colocamos imagen
                     jLabelImagen.setIcon(imagenCarpeta);
+                    
                }
 
             }
@@ -547,6 +556,15 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     {
         fechaActualizada=false;
         imagenActualizada=false;
+    }
+
+    private ImageIcon readaptarImagen(ImageIcon i)
+    {
+        Image imagen=i.getImage();
+        
+        imagen=imagen.getScaledInstance(267, 181, Image.SCALE_SMOOTH);
+        
+        return new ImageIcon(imagen);
     }
         
       
