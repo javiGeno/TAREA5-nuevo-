@@ -6,6 +6,7 @@ import Modelo.ConsultasProductos;
 import Modelo.Productos;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 
 
@@ -17,7 +18,7 @@ public class ComponerPedido extends javax.swing.JPanel {
     private ConsultasProductos consultaProductos;
     private ArrayList<Productos> listaProductos;
     private Productos producto;
-    private boolean productoElegido=false;
+    private boolean seHaSeleccionadoProducto=false;
     
     
     public ComponerPedido(VentanaPrincipal p) {
@@ -166,22 +167,38 @@ public class ComponerPedido extends javax.swing.JPanel {
 
     private void jButtonEfectuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEfectuarActionPerformed
        
-        int filaInsertada;
-        int pedido, produc, cantidad;
-        float precioConIva;
-        ConsultasComposicion consultasCompo=venP.getjPanelVerComposicion().getResultadoComposiciones();
-        try{
-            
-            pedido=Integer.parseInt(jTextFieldNumeroPedido.getText());
-            produc=Integer.parseInt(jTextFieldNumeroProducto.getText());
-            cantidad=Integer.parseInt(jTextFieldCantidadArticulos.getText());
-            precioConIva=Float.parseFloat(jTextFieldPrecioIva.getText());
-            
-            consultasCompo.inserccionComposicion(produc,precioConIva,cantidad);
-        }
-        catch(SQLException e)  
+        if(seHaSeleccionadoProducto)
         {
-            
+            int filaInsertada;
+            int pedido, produc, cantidad;
+            float precioConIva;
+            ConsultasComposicion consultasCompo=venP.getjPanelVerComposicion().getResultadoComposiciones();
+
+
+            try{
+               
+                pedido=Integer.parseInt(jTextFieldNumeroPedido.getText());
+                produc=Integer.parseInt(jTextFieldNumeroProducto.getText());
+                cantidad=Integer.parseInt(jTextFieldCantidadArticulos.getText());
+                precioConIva=Float.parseFloat(jTextFieldPrecioIva.getText());
+
+                filaInsertada=consultasCompo.inserccionComposicion(cantidad,precioConIva, produc);
+                
+                JOptionPane.showMessageDialog(null, filaInsertada+" articulo añadido", "ARTICULO AÑADIDO" , JOptionPane.INFORMATION_MESSAGE);
+               //reseteamos la vista de composiciones
+                venP.getjPanelVerPedidos().resetComposiciones();
+                //mostramos las composiciones que tiene
+                venP.cambioDePanel(venP.getjPanelVerComposicion());
+               //una vez insertado se pone a falso
+               seHaSeleccionadoProducto=false;
+               //vaciamos campos producto
+               vaciarCamposPro();
+                
+            }
+            catch(SQLException e)  
+            {
+                  System.out.println("FALLOOOO");
+            }
         }
     }//GEN-LAST:event_jButtonEfectuarActionPerformed
 
@@ -192,8 +209,11 @@ public class ComponerPedido extends javax.swing.JPanel {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         
-        System.out.println(jList1.getSelectedIndex());
+        int productoElegido=jList1.getSelectedIndex();
+        actualizarDatosProducto(productoElegido);
         
+        seHaSeleccionadoProducto=true;
+        System.out.println(seHaSeleccionadoProducto);
         
     }//GEN-LAST:event_jList1MouseClicked
 
@@ -268,6 +288,47 @@ public class ComponerPedido extends javax.swing.JPanel {
     {
         cargarProductos();
         rellenarLista();
+    }
+
+    private void actualizarDatosProducto(int indiceElegido) 
+    {
+        Productos prodElegido;
+        float precioConIva;
+        float precioSinIva;
+        
+        /*si la lista de cadenas es mayor a 1 quiere decir que solo hay un producto
+        por tanto obtendremos un elemento del ArrayList*/  
+        if(cadenasProductos.length>1)
+        {
+            prodElegido=listaProductos.get(indiceElegido);
+            
+            jTextFieldNumeroProducto.setText(""+ prodElegido.getCodigoProducto());
+            
+            precioSinIva=prodElegido.getPrecioSinIva();
+            precioConIva=(float) (precioSinIva*1.21);
+            
+            jTextFieldPrecioIva.setText(""+precioConIva);
+        }
+        else
+        {
+            prodElegido=producto;
+            
+            jTextFieldNumeroProducto.setText(""+ prodElegido.getCodigoProducto());
+            
+            precioSinIva=prodElegido.getPrecioSinIva();
+            precioConIva=(float) (precioSinIva*1.21);
+            
+            jTextFieldPrecioIva.setText(""+precioConIva);
+            
+        }
+        
+        
+    }
+
+    private void vaciarCamposPro() 
+    {
+        jTextFieldNumeroProducto.setText("");
+        jTextFieldPrecioIva.setText("");
     }
 
 }

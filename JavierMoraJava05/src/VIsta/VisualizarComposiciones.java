@@ -5,6 +5,7 @@ import Modelo.Composicion;
 import Modelo.ConsultasComposicion;
 import java.sql.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -115,26 +116,45 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
     {
         resultadoComposiciones=new ConsultasComposicion(numPedido);
         
-        try
+        if(resultadoComposiciones!=null)
         {
-            Object composicionesPedido=resultadoComposiciones.obtenerResultadoSelectComposicion();
-            
-            if(composicionesPedido instanceof ArrayList)
-            {   
-                   composiciones=new ArrayList();
-                   composiciones=(ArrayList<Composicion>) composicionesPedido;
-                   cantidadComposiciones=composiciones.size();
-            }
-            else
+            try
             {
-                   composicion=new Composicion();
-                   composicion=(Composicion) composicionesPedido;
-                   cantidadComposiciones=1;
+                Object composicionesPedido=resultadoComposiciones.obtenerResultadoSelectComposicion();
+
+                if(composicionesPedido instanceof ArrayList)
+                {   
+                       composiciones=new ArrayList();
+                       composiciones=(ArrayList<Composicion>) composicionesPedido;
+                       cantidadComposiciones=composiciones.size();
+                }
+                else
+                {
+                       composicion=new Composicion();
+                       composicion=(Composicion) composicionesPedido;
+                       cantidadComposiciones=1;
+                }
+            }
+            catch(SQLException e)
+            {
+
             }
         }
-        catch(SQLException e)
+        else
         {
+            int afirmacion=JOptionPane.showInternalConfirmDialog(null, "No tiene articulos, ¿Quiere añadir alguno?", "COMPOSICIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
             
+            if(afirmacion==1)
+            {
+                venP.cambioDePanel(venP.getjPanelComponerPedido());
+
+                int numPed=numPedido;
+                //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
+                int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
+                //pasamos el numero de pedido y la cantidad para escribirla en los textField correspondientes
+                venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
+                venP.getjPanelComponerPedido().montarListaProductos();
+            }
         }
         
         
@@ -187,6 +207,7 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
         datosTabla.setRowCount(0);
     }
     
+    //se utiliza para sumar la cantidad en la columna 3 de la tabla c
     public int getCantidadComposiciones() {
         return cantidadComposiciones;
     }

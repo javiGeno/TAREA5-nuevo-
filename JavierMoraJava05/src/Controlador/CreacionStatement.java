@@ -23,7 +23,7 @@ public class CreacionStatement {
 
     public static Statement getSimpleStatement() throws SQLException {
         
-        simpleStatement=ConexionValidacion.getConexionBD().createStatement();
+        simpleStatement=ConexionValidacion.getConexionBD().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         
         return simpleStatement;
     }

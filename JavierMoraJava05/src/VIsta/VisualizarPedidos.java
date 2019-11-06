@@ -257,6 +257,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         int numPed=pedidoActual.getNumeroPedido();
         //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
         int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
+        //pasamos el numero de pedido y la cantidad para escribirla en los textField correspondientes
         venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
         venP.getjPanelComponerPedido().montarListaProductos();
     }//GEN-LAST:event_jButtonAñadirProductoActionPerformed
@@ -271,7 +272,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
 
     private void jButtonCambioImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCambioImagenActionPerformed
        
-        //adaptacionFileChooser();
+        
         
         int seleccion= jFileChooserImagen.showDialog(this,"Obtener Imagen");
         
@@ -342,9 +343,12 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         
     public void resetComposiciones()
     {
-        venP.getjPanelVerComposicion().resetTable();
-        venP.getjPanelVerComposicion().cargaComposiciones(pedidoActual.getNumeroPedido());
-        venP.getjPanelVerComposicion().mostrarDatosTabla();
+        if(pedidoActual!=null)
+        {
+            venP.getjPanelVerComposicion().resetTable();
+            venP.getjPanelVerComposicion().cargaComposiciones(pedidoActual.getNumeroPedido());
+            venP.getjPanelVerComposicion().mostrarDatosTabla();
+        }
     }
     
     public void reset()

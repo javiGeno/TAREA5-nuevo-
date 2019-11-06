@@ -10,7 +10,6 @@ public class ConsultasComposicion {
     
      private String consultasSelectComposicion="select * from composicion where ped_composicion=";
      private String inserccionComposicion="insert into composicion values(";
-     private String consultasInsertComposicion;
      private Composicion compo;
      private int numeroPedido;
      private ArrayList<Composicion> listaCompo;
@@ -18,6 +17,7 @@ public class ConsultasComposicion {
      public ConsultasComposicion(int  numPedido)
      {
          numeroPedido=numPedido;
+         
          
      }
 
@@ -48,7 +48,9 @@ public class ConsultasComposicion {
 
     public String getConsultasInsertComposicion(int cant, float precIva, int pro) {
         
-        return consultasInsertComposicion + numeroPedido +", " +pro+ ", "+ cant+ ", "+ precIva +')';
+        
+        return inserccionComposicion + numeroPedido +", " +pro+ ", "+ cant+ ", "+ precIva +");";
+        
     }
      
     public int inserccionComposicion(int cant, float precIva, int pro) throws SQLException

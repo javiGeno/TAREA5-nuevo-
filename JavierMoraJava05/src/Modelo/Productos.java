@@ -48,7 +48,7 @@ public class Productos {
 
     @Override
     public String toString() {
-        return ">"+ codigoProducto +"   "+ descripcion + "   PRECIO sin iva: " + precioSinIva  ;
+        return ">"+ codigoProducto +"   "+ descripcion + "   PRECIO sin iva: " + precioSinIva+" €"  ;
     }
     
     

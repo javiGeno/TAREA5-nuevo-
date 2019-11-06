@@ -4,6 +4,8 @@ package Controlador;
 import Modelo.*;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class GestionarOperaciones {
@@ -15,13 +17,20 @@ public class GestionarOperaciones {
     
     public GestionarOperaciones() throws SQLException
     {
-        statementTablaProducto=CreacionStatement.getSimpleStatement();
-        statementTablaComposicion=CreacionStatement.getUpdatableStatement();
+        
     }
+    
+   
     
     public static Object todasComposicionesDePedido(String consulta) throws SQLException
     {
-       
+       //si aun no se ha montado el statement
+       if(statementTablaComposicion==null)
+       {
+           System.out.println("entraaaa");
+            statementTablaComposicion= CreacionStatement.getUpdatableStatement();
+       }
+        
         ResultSet resultado=statementTablaComposicion.executeQuery(consulta);
        
         int numeroFilasConsulta=cantidadFilas(resultado);
@@ -45,7 +54,8 @@ public class GestionarOperaciones {
         }
         else
         {
-              
+              if(numeroFilasConsulta==1)
+              {
                 Composicion filaObtenida;
 
                 resultado.first();
@@ -55,6 +65,12 @@ public class GestionarOperaciones {
                
                 resultado.close();
                 return filaObtenida;
+              }
+              else
+              {
+                  //no hay composiciones en el pedido
+                  return null;
+              }
         }
         
         
@@ -63,7 +79,8 @@ public class GestionarOperaciones {
     
     public static Object todosProductos(String consulta) throws SQLException
     {
-    
+        
+        statementTablaProducto= CreacionStatement.getSimpleStatement();
         
         ResultSet resultado=statementTablaProducto.executeQuery(consulta);
         
@@ -107,8 +124,15 @@ public class GestionarOperaciones {
     
     public static int insertarComposicion(String sentencia) throws SQLException
     {
-       
-         int resultado=statementTablaProducto.executeUpdate(sentencia);
+        //si aun no se ha montado el statement
+        if(statementTablaComposicion==null)
+        {
+            System.out.println("entraaaa");
+             statementTablaComposicion= CreacionStatement.getUpdatableStatement();
+        }
+           
+         
+        int resultado=statementTablaProducto.executeUpdate(sentencia);
         
          
          return resultado;
