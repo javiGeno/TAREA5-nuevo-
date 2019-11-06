@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class ConsultasComposicion {
     
      private String consultasSelectComposicion="select * from composicion where ped_composicion=";
+     private String inserccionComposicion="insert into composicion values(";
      private String consultasInsertComposicion;
      private Composicion compo;
      private int numeroPedido;
@@ -44,5 +45,19 @@ public class ConsultasComposicion {
         
         return resultado;
     }
+
+    public String getConsultasInsertComposicion(int cant, float precIva, int pro) {
+        
+        return consultasInsertComposicion + numeroPedido +", " +pro+ ", "+ cant+ ", "+ precIva +')';
+    }
      
+    public int inserccionComposicion(int cant, float precIva, int pro) throws SQLException
+    {
+        int filasInsertadas;
+        
+        filasInsertadas=GestionarOperaciones.insertarComposicion(getConsultasInsertComposicion(cant, precIva, pro));
+       
+        
+        return filasInsertadas;
+    }
 }

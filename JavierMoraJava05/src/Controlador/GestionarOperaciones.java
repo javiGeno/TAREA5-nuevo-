@@ -9,22 +9,20 @@ import java.util.*;
 public class GestionarOperaciones {
 
     
+    private static Statement statementTablaProducto;
+    private static Statement statementTablaComposicion;
     
     
-    
-    public GestionarOperaciones()
+    public GestionarOperaciones() throws SQLException
     {
-        
-        
+        statementTablaProducto=CreacionStatement.getSimpleStatement();
+        statementTablaComposicion=CreacionStatement.getUpdatableStatement();
     }
     
     public static Object todasComposicionesDePedido(String consulta) throws SQLException
     {
-        
-
-        Statement statement=CreacionStatement.getUpdatableStatement();
-        
-        ResultSet resultado=statement.executeQuery(consulta);
+       
+        ResultSet resultado=statementTablaComposicion.executeQuery(consulta);
        
         int numeroFilasConsulta=cantidadFilas(resultado);
         
@@ -41,6 +39,7 @@ public class GestionarOperaciones {
                 
             }
             
+            resultado.close();
             return filasObtenidas;
                 
         }
@@ -54,7 +53,7 @@ public class GestionarOperaciones {
                
                 filaObtenida=rellenaCompo(resultado);
                
-
+                resultado.close();
                 return filaObtenida;
         }
         
@@ -64,11 +63,9 @@ public class GestionarOperaciones {
     
     public static Object todosProductos(String consulta) throws SQLException
     {
+    
         
-
-        Statement statement=CreacionStatement.getUpdatableStatement();
-        
-        ResultSet resultado=statement.executeQuery(consulta);
+        ResultSet resultado=statementTablaProducto.executeQuery(consulta);
         
         int numeroFilasConsulta=cantidadFilas(resultado);
         
@@ -86,6 +83,7 @@ public class GestionarOperaciones {
                 
             }
             
+            resultado.close();
             return filasObtenidas;
                 
         }
@@ -98,13 +96,35 @@ public class GestionarOperaciones {
 
                 filaObtenida=rellenaProducto(resultado);
 
-
+                resultado.close();
                 return filaObtenida;
         }
         
         
         
     }
+    
+    
+    public static int insertarComposicion(String sentencia) throws SQLException
+    {
+       
+         int resultado=statementTablaProducto.executeUpdate(sentencia);
+        
+         
+         return resultado;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     private static Productos rellenaProducto(ResultSet resultado) throws SQLException
     {

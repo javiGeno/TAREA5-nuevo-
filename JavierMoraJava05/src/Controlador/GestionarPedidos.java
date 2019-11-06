@@ -21,7 +21,7 @@ public class GestionarPedidos {
         
         
         montarStatement ();
-        creacionResultSet();//lanzara la exepcion si no hay pedidos y se capturara en la vista para mostrar el mensaje
+        creacionResultSet();//lanzara la exepcion si se produce un problema
         calcularFilasPedidos();//Se calculan el numero de filas para controlar los pedidos
         pedido=new Pedidos();
         

@@ -190,4 +190,10 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
     public int getCantidadComposiciones() {
         return cantidadComposiciones;
     }
+
+    public ConsultasComposicion getResultadoComposiciones() {
+        return resultadoComposiciones;
+    }
+    
+    
 }

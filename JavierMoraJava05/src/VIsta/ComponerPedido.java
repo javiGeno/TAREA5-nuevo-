@@ -1,6 +1,7 @@
 
 package VIsta;
 
+import Modelo.ConsultasComposicion;
 import Modelo.ConsultasProductos;
 import Modelo.Productos;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ public class ComponerPedido extends javax.swing.JPanel {
     private ConsultasProductos consultaProductos;
     private ArrayList<Productos> listaProductos;
     private Productos producto;
+    private boolean productoElegido=false;
     
     
     public ComponerPedido(VentanaPrincipal p) {
@@ -164,6 +166,23 @@ public class ComponerPedido extends javax.swing.JPanel {
 
     private void jButtonEfectuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEfectuarActionPerformed
        
+        int filaInsertada;
+        int pedido, produc, cantidad;
+        float precioConIva;
+        ConsultasComposicion consultasCompo=venP.getjPanelVerComposicion().getResultadoComposiciones();
+        try{
+            
+            pedido=Integer.parseInt(jTextFieldNumeroPedido.getText());
+            produc=Integer.parseInt(jTextFieldNumeroProducto.getText());
+            cantidad=Integer.parseInt(jTextFieldCantidadArticulos.getText());
+            precioConIva=Float.parseFloat(jTextFieldPrecioIva.getText());
+            
+            consultasCompo.inserccionComposicion(produc,precioConIva,cantidad);
+        }
+        catch(SQLException e)  
+        {
+            
+        }
     }//GEN-LAST:event_jButtonEfectuarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -174,6 +193,7 @@ public class ComponerPedido extends javax.swing.JPanel {
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         
         System.out.println(jList1.getSelectedIndex());
+        
         
     }//GEN-LAST:event_jList1MouseClicked
 
