@@ -42,16 +42,18 @@ public class ConexionValidacion {
         try{
             Class.forName("org.postgresql.Driver");
             conexionBD=DriverManager.getConnection(URL, usuario, contraseña);
+            
+            return true;
         }
-        catch(Exception e)
+        catch(ClassNotFoundException | SQLException e)
         {
-            System.out.println("Ha ocurrido un problema con la BD 1: "+e.getMessage());
-            //conectadoPostgres=false;
+            //escribir codigo
+            
             return false;
         }
         
-        //conectadoPostgres=true;
-        return true;
+        
+        
         
     }
     
@@ -63,53 +65,61 @@ public class ConexionValidacion {
         try{
             Class.forName("com.mysql.jdbc.Driver");
             conexionBD2=DriverManager.getConnection(URL, usuario, contraseña);
+            
+             return true;
         }
-        catch(Exception e)
+        catch(ClassNotFoundException | SQLException e)
         {
-            System.out.println("Ha ocurrido un problema con la BD 2: "+e.getMessage());
-            //conectadoMysql=false;
+            //escribir codigo
             return false;
         }
         
-        //conectadoMysql=true;
-        return true;
+        
+       
         
     }
     ////////////////////////////////////////////FIN CONEXIÓN//////////////////////////////////////////
     
     
     //comprueba que la contraseña sea correcta y usuario 
-    public static boolean realizaStatementValidacion(String pass, String usu) throws SQLException
+    public static boolean realizaStatementValidacion(String pass, String usu) 
     {
         String sentenciaSQL="select * from USUARIOS where password=? and usuario=?";
         
         
-           
-            //Valido en mysql y machaco porque no vy hacer mas operaciones con él 
-            statamentValidacion=conexionBD2.prepareStatement(sentenciaSQL,  ResultSet.CONCUR_UPDATABLE);//Valido en mysql y machaco
-            
-            statamentValidacion.setString(1, pass);
-            statamentValidacion.setString(2, usu);
+           try
+           {
+                //Valido en mysql y machaco porque no vy hacer mas operaciones con él 
+                statamentValidacion=conexionBD2.prepareStatement(sentenciaSQL,  ResultSet.CONCUR_UPDATABLE);//Valido en mysql y machaco
 
-            //valido en postgres
-            statamentValidacion=conexionBD.prepareStatement(sentenciaSQL, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            
-            statamentValidacion.setString(1, pass);
-            statamentValidacion.setString(2, usu);
-            
-            
-            ResultSet user=statamentValidacion.executeQuery();
-            
-            user.beforeFirst();
-            user.next();
-            
-            
-            usuario=user.getString("usuario");
-            
-            
-            validadoUsuario=true;
-            return isValidadoUsuario();
-            
+                statamentValidacion.setString(1, pass);
+                statamentValidacion.setString(2, usu);
+
+                //valido en postgres
+                statamentValidacion=conexionBD.prepareStatement(sentenciaSQL, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+                statamentValidacion.setString(1, pass);
+                statamentValidacion.setString(2, usu);
+
+
+                ResultSet user=statamentValidacion.executeQuery();
+
+                user.beforeFirst();
+                user.next();
+
+
+                usuario=user.getString("usuario");
+
+
+                validadoUsuario=true;
+                return isValidadoUsuario();
+           }
+           catch(SQLException ex)
+           {
+               validadoUsuario=true;
+                return isValidadoUsuario();
+               //escribir codigo
+           }
       
         
     }
@@ -125,6 +135,35 @@ public class ConexionValidacion {
     }
     
     
+    /*ESTE METODO ME DEVOLVERA EL NUMERO DE FILAS QUE TIENE LA TABLA B PARA CUANDO INSERTEMOS UNO DE LA TABLA B
+    INCREMENTAR LA PRIMARYKEY
+    */
+    public static int  obtencionNumeroPedido()
+    {
+        Statement st=CreacionStatement.getSimpleStatement();
+        int numPed;
+        try
+        {
+            ResultSet set =st.executeQuery("select max(num_pedido) from pedidos");
+            
+            //guarda lo que recupera de la columna 1
+            set.first();
+            
+            numPed=set.getInt(1);
+            
+            
+            set.close();
+            
+            return numPed;
+            
+        }catch(SQLException e)
+        {
+            //escribir codigo
+            return 0;
+        }
+        
+        
+    }
     
     public static void cerrarConexion()
     {

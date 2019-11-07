@@ -2,7 +2,9 @@
 package VIsta;
 
 import Controlador.ConexionValidacion;
+import Controlador.FileModif;
 import java.awt.Color;
+import java.io.File;
 import javax.swing.*;
 
 
@@ -15,7 +17,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private ComponerPedido jPanelComponerPedido;
     private AcercaDe JDialogAcerca;
     private String NombreUsuario;//se guardará la cadena del nombre del usuario que ha entrado en la bd
-
+    
     
     
     
@@ -28,6 +30,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     jPanelConexion=new Conexion(this);
     jPanelComponerPedido=new ComponerPedido(this);
     
+    //abrimos el fichero de los posibles errores
+    FileModif.abrirFichero();
     
     
     reset();
@@ -138,6 +142,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanelComponerPedido.setVisible(false);
         this.setContentPane(jPanelVerPedidos);
         
+        
     }//GEN-LAST:event_jMenuItemVerPedidosActionPerformed
 
     private void jMenuItemInsertarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInsertarPedidoActionPerformed
@@ -148,6 +153,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanelConexion.setVisible(false);
         jPanelComponerPedido.setVisible(false);
         this.setContentPane(jPanelInserccionPedido);
+        //cuando cambiamos al panel de insertar pedidos reseteamos campos
+        jPanelInserccionPedido.reset();
         
     }//GEN-LAST:event_jMenuItemInsertarPedidoActionPerformed
 
@@ -157,6 +164,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VentanaPrincipal().setVisible(true);
+                
+                FileModif.cerrarFichero();
             }
         });
     }

@@ -283,6 +283,37 @@ public class GestionarPedidos {
         
     }
     
+   public int inserccionPedido(Pedidos ped)
+   {
+       try
+        {
+          
+            resultadoConsulta.moveToInsertRow();
+            
+            resultadoConsulta.updateInt(1, ped.getNumeroPedido());
+            resultadoConsulta.updateString(2, ped.getNif());
+            resultadoConsulta.updateString(3, ped.getCodigoPostal());
+            resultadoConsulta.updateString(5, ped.getDireccion());
+            resultadoConsulta.updateString(6, ped.getRutaFoto());
+            resultadoConsulta.updateString(7, ped.getUsuPedidos());
+            
+            java.util.Date fechaPrograma=ped.getFechaPedido().getTime();
+            java.sql.Date fechaBase = new Date(fechaPrograma.getTime()) ;
+            
+            resultadoConsulta.updateDate(4, fechaBase);
+            
+            resultadoConsulta.insertRow();
+            resultadoConsulta.last();//coloco el resultset al final
+            return 1;
+            
+        }
+        catch(SQLException e)
+        {
+            return 0;
+        }
+        
+       
+   }
     
     
     

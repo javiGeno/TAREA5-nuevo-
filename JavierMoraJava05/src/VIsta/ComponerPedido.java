@@ -213,7 +213,7 @@ public class ComponerPedido extends javax.swing.JPanel {
         actualizarDatosProducto(productoElegido);
         
         seHaSeleccionadoProducto=true;
-        System.out.println(seHaSeleccionadoProducto);
+        //System.out.println(seHaSeleccionadoProducto);
         
     }//GEN-LAST:event_jList1MouseClicked
 

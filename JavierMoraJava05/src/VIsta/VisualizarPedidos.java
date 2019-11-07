@@ -252,14 +252,10 @@ public class VisualizarPedidos extends javax.swing.JPanel {
 
     private void jButtonAñadirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirProductoActionPerformed
 
-        venP.cambioDePanel(venP.getjPanelComponerPedido());
-
-        int numPed=pedidoActual.getNumeroPedido();
-        //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
-        int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
-        //pasamos el numero de pedido y la cantidad para escribirla en los textField correspondientes
-        venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
-        venP.getjPanelComponerPedido().montarListaProductos();
+       /*las tengo en un metodo, porque tambien vy a llamarlo, en el caso de que el pedido
+        no tenga composiciones y el usuario acepte en la ventana emergente el querer insertar alguno
+        */
+        instruccionesParaInsertarProducto();
     }//GEN-LAST:event_jButtonAñadirProductoActionPerformed
 
     private void jButtonComposicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonComposicionActionPerformed
@@ -461,6 +457,10 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     
     }
 
+    public Pedidos getPedidoActual() {
+        return pedidoActual;
+    }
+
     private GregorianCalendar obtenerFechaGregorian() 
     {
         return new GregorianCalendar(
@@ -569,6 +569,21 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         imagen=imagen.getScaledInstance(267, 181, Image.SCALE_SMOOTH);
         
         return new ImageIcon(imagen);
+    }
+
+    public GestionarPedidos getGestionPedidos() {
+        return gestionPedidos;
+    }
+
+    public void instruccionesParaInsertarProducto() 
+    {
+        venP.cambioDePanel(venP.getjPanelComponerPedido());
+        int numPed=pedidoActual.getNumeroPedido();
+        //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
+        int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
+        //pasamos el numero de pedido y la cantidad para escribirla en los textField correspondientes
+        venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
+        venP.getjPanelComponerPedido().montarListaProductos();
     }
         
       
