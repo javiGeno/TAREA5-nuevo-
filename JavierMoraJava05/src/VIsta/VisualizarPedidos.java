@@ -640,6 +640,12 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         return gestionPedidos;
     }
 
+    public void setPedidoActual(Pedidos pedidoActual) {
+        this.pedidoActual = pedidoActual;
+    }
+    
+    
+
     public void instruccionesParaInsertarProducto() 
     {
         venP.cambioDePanel(venP.getjPanelComponerPedido());

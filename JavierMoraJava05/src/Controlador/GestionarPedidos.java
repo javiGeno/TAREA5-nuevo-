@@ -5,8 +5,6 @@ import Modelo.ConsultasPedido;
 import Modelo.Pedidos;
 import java.sql.*;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class GestionarPedidos {
@@ -312,8 +310,8 @@ public class GestionarPedidos {
             resultadoConsulta.updateDate(4, fechaBase);
             
             resultadoConsulta.insertRow();
-            resultadoConsulta.first();//coloco el resultset al principio
             
+            creacionResultSet();
             //mirar como devuelve cuantas filas actualizadas
             return 1;
             

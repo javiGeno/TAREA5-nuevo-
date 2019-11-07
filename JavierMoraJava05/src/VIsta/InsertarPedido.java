@@ -176,6 +176,11 @@ public class InsertarPedido extends javax.swing.JPanel {
                 
                 pediInsertado = venP.getjPanelVerPedidos().getGestionPedidos().inserccionPedido(ped);
                 JOptionPane.showMessageDialog(this, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
+                
+                //mostramos pedidos
+                venP.getjPanelVerPedidos().reset();
+                venP.getjPanelVerPedidos().setPedidoActual(ped);
+                venP.cambioDePanel(venP.getjPanelVerPedidos());
             
             } catch (Errores e) {
                  JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
