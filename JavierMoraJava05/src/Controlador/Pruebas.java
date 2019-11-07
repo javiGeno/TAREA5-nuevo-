@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class Pruebas {
 
     
-    public static void main(String[] args) throws SQLException {
+   /* public static void main(String[] args) throws SQLException {
        
         
     
@@ -66,7 +66,7 @@ public class Pruebas {
             System.out.println(c.getCantidad());
             System.out.println(c.getPrecioConIva());
            
-        }*/
+        }
         
         ConsultasProductos productos=new ConsultasProductos();
         
@@ -97,5 +97,5 @@ public class Pruebas {
                 System.out.println(p.getCategoria());
            
         }
-    }
+    }*/
 }

@@ -3,6 +3,7 @@ package Controlador;
 
 
 import java.io.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,37 +14,47 @@ public class FileModif {
     private static  BufferedWriter fichWrit;
    
     
-    public static void abrirFichero()
+    private static void abrirFichero()
     {
         ficheroLogErrores=new File("Errores");
         try {
             fichWrit=new BufferedWriter(new FileWriter(ficheroLogErrores, true));
             
+            System.out.println("fichero abierto correctamente");
         } catch (IOException ex) {
-            System.out.println("Error de fichero");
+            System.out.println("Error al abrir fichero");
         }
         
     }
     
     
-    public static void escribir(String error)
+    public static void escribir(String mensajeError)
     {
-        try {
-            fichWrit.write(error);
-            fichWrit.newLine();
+        Date fechaError=new Date();
+        String informacionCompleta=fechaError.toString()+" "+mensajeError;
         
+        try {
+            abrirFichero();
+            fichWrit.write(informacionCompleta);
+            fichWrit.newLine();
+            System.out.println(informacionCompleta);
+        
+            cerrarFichero();
+            
         } catch (IOException ex) {
-            System.out.println("Error de fichero");
+            System.out.println("Error al escribir fichero");
         }
     }
     
-    public static void cerrarFichero()
+    private static void cerrarFichero()
     {
         try {
             fichWrit.flush();
             fichWrit.close();
+            
+            System.out.println("fichero cerrado correctamente");
         } catch (IOException ex) {
-            System.out.println("Error de fichero");
+            System.out.println("Error al cerrar fichero");
         }
         
     }

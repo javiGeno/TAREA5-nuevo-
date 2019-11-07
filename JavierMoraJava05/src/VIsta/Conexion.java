@@ -2,8 +2,8 @@
 package VIsta;
 
 import Controlador.ConexionValidacion;
+import Controlador.Errores;
 import java.awt.Color;
-import java.sql.*;
 import javax.swing.JOptionPane;
 
 
@@ -132,10 +132,9 @@ public class Conexion extends javax.swing.JPanel {
             venP.getjPanelVerPedidos().reset();
             
         }
-        catch(SQLException e)
+        catch(Errores e)
         {
-            System.out.println("Error: "+e.getErrorCode()+", "+e.getMessage());
-            JOptionPane.showMessageDialog(null, "Los datos introducidos no son correctos", "ACCESO DENEGADO", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             reset();
         }
         

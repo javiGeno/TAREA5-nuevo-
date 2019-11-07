@@ -12,14 +12,15 @@ public class CreacionStatement {
     private static Statement simpleStatement;
     private static Statement updatableStatement;
 
-    public static PreparedStatement getStatementPreparado(String consulta)  {
+    public static PreparedStatement getStatementPreparado(String consulta) throws Errores  {
         
        
         try {
             statementPreparado=ConexionValidacion.getConexionBD().prepareStatement(consulta,  ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException ex) {
             
-            //System.out.println(ex.ex.getMessage());
+            FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
        
        
@@ -30,28 +31,30 @@ public class CreacionStatement {
 
     
 
-    public static Statement getSimpleStatement() {
+    public static Statement getSimpleStatement() throws Errores {
         
         try
         {
             simpleStatement=ConexionValidacion.getConexionBD().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         }
-        catch(SQLException e)
+        catch(SQLException ex)
         {
-            //instanciar error y lanzar
+            FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         return simpleStatement;
     }
 
     
 
-    public static Statement getUpdatableStatement()  {
+    public static Statement getUpdatableStatement() throws Errores  {
         
         try {
             updatableStatement=ConexionValidacion.getConexionBD().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException ex) {
            
-            //instanciar error y lanzar
+           FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
         return updatableStatement;

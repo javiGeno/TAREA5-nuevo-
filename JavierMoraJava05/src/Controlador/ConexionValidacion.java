@@ -34,7 +34,7 @@ public class ConexionValidacion {
    /////////////////////////////////CONEXIÓN//////////////////////////////////////
     //Si salta la exepcion, se captura aqui pero devuelve un boleano que sera tratado en la vista
     //Para no pasarle tantos parametros he creado un metodo de conexion para cada bd
-    public static boolean realizarConexionPostgres() 
+    public static boolean realizarConexionPostgres() throws Errores 
     {
         String URL="jdbc:postgresql://localhost:5432/TIENDA";
         String usuario="usuario";
@@ -47,9 +47,10 @@ public class ConexionValidacion {
         }
         catch(ClassNotFoundException | SQLException e)
         {
-            //escribir codigo
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
             
-            return false;
+            
         }
         
         
@@ -57,7 +58,7 @@ public class ConexionValidacion {
         
     }
     
-    public static boolean realizarConexionMysql() 
+    public static boolean realizarConexionMysql() throws Errores 
     {
         String URL="jdbc:mysql://localhost:3306/Tiendas";
         String usuario="root";
@@ -70,8 +71,9 @@ public class ConexionValidacion {
         }
         catch(ClassNotFoundException | SQLException e)
         {
-            //escribir codigo
-            return false;
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+            
         }
         
         
@@ -82,7 +84,7 @@ public class ConexionValidacion {
     
     
     //comprueba que la contraseña sea correcta y usuario 
-    public static boolean realizaStatementValidacion(String pass, String usu) 
+    public static boolean realizaStatementValidacion(String pass, String usu) throws Errores 
     {
         String sentenciaSQL="select * from USUARIOS where password=? and usuario=?";
         
@@ -117,8 +119,9 @@ public class ConexionValidacion {
            catch(SQLException ex)
            {
                validadoUsuario=true;
-                return isValidadoUsuario();
-               //escribir codigo
+                
+              FileModif.escribir(ex.getMessage());
+             throw new Errores(Errores.ERROR_CONEXION);
            }
       
         
@@ -138,7 +141,7 @@ public class ConexionValidacion {
     /*ESTE METODO ME DEVOLVERA EL NUMERO DE FILAS QUE TIENE LA TABLA B PARA CUANDO INSERTEMOS UNO DE LA TABLA B
     INCREMENTAR LA PRIMARYKEY
     */
-    public static int  obtencionNumeroPedido()
+    public static int  obtencionNumeroPedido() throws Errores
     {
         Statement st=CreacionStatement.getSimpleStatement();
         int numPed;
@@ -158,14 +161,14 @@ public class ConexionValidacion {
             
         }catch(SQLException e)
         {
-            //escribir codigo
-            return 0;
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
         
     }
     
-    public static void cerrarConexion()
+    public static void cerrarConexion() throws Errores
     {
          try{
             
@@ -175,7 +178,8 @@ public class ConexionValidacion {
          }
          catch(SQLException e)
          {
-             
+             FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
          }
         
     }

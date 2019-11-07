@@ -2,9 +2,12 @@
 package VIsta;
 
 import Controlador.ConexionValidacion;
+import Controlador.Errores;
 import Modelo.Pedidos;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -168,16 +171,25 @@ public class InsertarPedido extends javax.swing.JPanel {
         if(ped!=null)
         {
             //insertamos sobre el resultSet
-            int pediInsertado=venP.getjPanelVerPedidos().getGestionPedidos().inserccionPedido(ped);
+            int pediInsertado;
+            try {
+                
+                pediInsertado = venP.getjPanelVerPedidos().getGestionPedidos().inserccionPedido(ped);
+                JOptionPane.showMessageDialog(this, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
             
-            JOptionPane.showMessageDialog(null, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
+            } catch (Errores e) {
+                 JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+
+            }
+            
+            
             
             reset();
         }
         else
         {
             
-            JOptionPane.showMessageDialog(null, "No se ha creado el pedido", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se ha creado el pedido", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
         }
        
         
@@ -235,13 +247,13 @@ public class InsertarPedido extends javax.swing.JPanel {
     private Pedidos  creacionNuevoPedido()
     {
         
-        Pedidos nuevoPedido;
+        Pedidos nuevoPedido = null;
            
-            if(!jTextFieldCodigoPostal.getText().equals("") && !jTextFieldDireccion.getText().equals(""))//falta fecha
+            if(!jTextFieldCodigoPostal.getText().equals("") && !jTextFieldDireccion.getText().equals(""))
             {
                 
-                /*el nif será el mismo que el pedido actual, pertenece al mismo usuario
-                si no tiene ningun pedido se le pedirá al usuario mediante un mensaje emeregente
+                /*el nif será el mismo que el pedido actual, pertenece al mismo usuario,
+                si no tiene ningun pedido se le pedirá el nif al usuario mediante un mensaje emeregente
                 en caso de que le de a cancelar y devuelva null, el pedido no se efectuara
                 */
                 String nif=obtenerDNI();
@@ -249,35 +261,48 @@ public class InsertarPedido extends javax.swing.JPanel {
                 if(nif!=null)
                 {
                     //obtenemos la primary key mas alta y sumamos 1
-                    int numPedido=ConexionValidacion.obtencionNumeroPedido()+1;
-                    String codPos=jTextFieldCodigoPostal.getText();
-                    String direccion=jTextFieldDireccion.getText();
-                    String rutaFoto="";
-                    GregorianCalendar fechaPedido=new GregorianCalendar();
-                    String usuPedido=jTextFieldCodigoCliente.getText();
+                    int numPedido=0;
+                    try {
+                        numPedido = ConexionValidacion.obtencionNumeroPedido()+1;
+                        
+                        String codPos=jTextFieldCodigoPostal.getText();
+                        String direccion=jTextFieldDireccion.getText();
+                        String rutaFoto="";
+                        GregorianCalendar fechaPedido=new GregorianCalendar();
+                        String usuPedido=jTextFieldCodigoCliente.getText();
 
 
-                    nuevoPedido=new Pedidos();
+                        nuevoPedido=new Pedidos();
 
-                    nuevoPedido.setNumeroPedido(numPedido);
-                    nuevoPedido.setNif(nif);
-                    nuevoPedido.setCodigoPostal(codPos);
-                    nuevoPedido.setDireccion(direccion);
-                    nuevoPedido.setFechaPedido(fechaPedido);
-                    nuevoPedido.setUsuPedidos(usuPedido);
-                    nuevoPedido.setRutaFoto(rutaFoto);
-
-                    return nuevoPedido;
+                        nuevoPedido.setNumeroPedido(numPedido);
+                        nuevoPedido.setNif(nif);
+                        nuevoPedido.setCodigoPostal(codPos);
+                        nuevoPedido.setDireccion(direccion);
+                        nuevoPedido.setFechaPedido(fechaPedido);
+                        nuevoPedido.setUsuPedidos(usuPedido);
+                        nuevoPedido.setRutaFoto(rutaFoto);
+                        
+                        
+                   
+                    } catch (Errores ex) {
+                        JOptionPane.showMessageDialog(this, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);                       
+                    }
+                    
+                   
                 }
                 else
                 {
-                    return null;
+                    //no se crea el pedido
+                    return nuevoPedido;
                 }
             }
             else
-            {
-                return null;
+            { 
+                //no se crea el pedido
+                return nuevoPedido;
             }
+            
+            return nuevoPedido;// no se crea el pedido
     }
     
     private String obtenerDNI()
@@ -287,7 +312,7 @@ public class InsertarPedido extends javax.swing.JPanel {
         
         if(pedActual==null)
         {
-            nif=JOptionPane.showInputDialog(null, "Introduce su dni", "NUEVO DNI", JOptionPane.INFORMATION_MESSAGE);
+            nif=JOptionPane.showInputDialog(this, "Introduce su dni", "NUEVO DNI", JOptionPane.INFORMATION_MESSAGE);
         
             if(nif==null)
             {

@@ -1,9 +1,11 @@
 
 package VIsta;
 
+import Controlador.Errores;
 import Modelo.ConsultasComposicion;
 import Modelo.ConsultasProductos;
 import Modelo.Productos;
+import com.aeat.valida.Validador;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -195,9 +197,9 @@ public class ComponerPedido extends javax.swing.JPanel {
                vaciarCamposPro();
                 
             }
-            catch(SQLException e)  
+            catch(Errores e)  
             {
-                  System.out.println("FALLOOOO");
+                  JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonEfectuarActionPerformed
@@ -271,9 +273,9 @@ public class ComponerPedido extends javax.swing.JPanel {
                 cadenasProductos[0]=producto.toString();
             }
         }
-        catch(SQLException e)
+        catch(Errores e)
         {
-            
+            JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
                 
         }
     }
@@ -331,4 +333,5 @@ public class ComponerPedido extends javax.swing.JPanel {
         jTextFieldPrecioIva.setText("");
     }
 
+    
 }

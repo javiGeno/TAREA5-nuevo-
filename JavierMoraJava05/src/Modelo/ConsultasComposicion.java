@@ -1,6 +1,7 @@
 
 package Modelo;
 
+import Controlador.Errores;
 import Controlador.GestionarOperaciones;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class ConsultasComposicion {
 
     
      
-    public Object obtenerResultadoSelectComposicion() throws SQLException
+    public Object obtenerResultadoSelectComposicion() throws Errores 
     {
         Object resultado;
         resultado=GestionarOperaciones.todasComposicionesDePedido(getConsultasSelectComposicion());
@@ -53,7 +54,7 @@ public class ConsultasComposicion {
         
     }
      
-    public int inserccionComposicion(int cant, float precIva, int pro) throws SQLException
+    public int inserccionComposicion(int cant, float precIva, int pro) throws Errores 
     {
         int filasInsertadas;
         

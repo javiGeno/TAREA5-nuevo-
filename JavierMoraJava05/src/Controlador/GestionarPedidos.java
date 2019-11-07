@@ -5,6 +5,8 @@ import Modelo.ConsultasPedido;
 import Modelo.Pedidos;
 import java.sql.*;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class GestionarPedidos {
@@ -15,7 +17,7 @@ public class GestionarPedidos {
     private Pedidos pedido;
     private int numFilas;
     
-    public GestionarPedidos(String usuario) throws SQLException
+    public GestionarPedidos(String usuario) throws Errores
     {
         this.usuario=usuario;
         
@@ -27,7 +29,7 @@ public class GestionarPedidos {
         
     }
     
-    private void  montarStatement () 
+    private void  montarStatement () throws Errores 
     {
         ConsultasPedido consultaPedidos=new ConsultasPedido();
         String consul=consultaPedidos.getConsultaPedidos();
@@ -36,20 +38,32 @@ public class GestionarPedidos {
         {
             statementPedidos=ConexionValidacion.getConexionBD().prepareStatement(consul, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-            System.out.println("Error: "+e.getMessage());
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+           
         }
         
         
         
     }
     
-    private void creacionResultSet() throws SQLException
+    private void creacionResultSet() throws Errores 
     {
         
-           statementPedidos.setString(1, usuario);
-           resultadoConsulta=statementPedidos.executeQuery();
+        try {
+            statementPedidos.setString(1, usuario);
+        } catch (SQLException ex) {
+            FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
+        try {
+            resultadoConsulta=statementPedidos.executeQuery();
+        } catch (SQLException ex) {
+            FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
            
     }
 
@@ -63,7 +77,7 @@ public class GestionarPedidos {
     
     
     
-    private void calcularFilasPedidos()
+    private void calcularFilasPedidos() throws Errores
     {
         
         
@@ -77,7 +91,8 @@ public class GestionarPedidos {
          }
          catch(SQLException e)
          {
-             
+             FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
              
          }
          
@@ -85,7 +100,7 @@ public class GestionarPedidos {
             
     }
     
-    public Pedidos obtenerSigPed()
+    public Pedidos obtenerSigPed() throws Errores
     {
         
         
@@ -110,20 +125,21 @@ public class GestionarPedidos {
         }
         catch(SQLException e)
         {
-            
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
         return null;//no hay pedidos 
     }
     
-    public Pedidos obtenerAnteriorPed()
+    public Pedidos obtenerAnteriorPed() throws Errores
     {
         
         
         
         try{    
            
-            if(resultadoConsulta.previous())
+           if(resultadoConsulta.previous())
            {
                pedido.setNumeroPedido(resultadoConsulta.getInt("num_pedido"));
                pedido.setNif(resultadoConsulta.getString("NIF"));
@@ -142,53 +158,42 @@ public class GestionarPedidos {
         }
         catch(SQLException e)
         {
-            return null;//no hay pedidos
+           FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
         return null;//no hay pedidos 
     }
     
-    public boolean esElUltimo()
+    public boolean esElUltimo() throws Errores
     {
          try
          {
-            if(resultadoConsulta.isLast())
-            {
-                  return true;
-            }
-            else
-            {
-                return false;
-            }
+             return resultadoConsulta.isLast();
          }
          catch(SQLException e)
          {
-             return false;
+             FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
          }
         
     }
     
-    public boolean esElPrimero()
+    public boolean esElPrimero() throws Errores
     {
          try
          {
-            if(resultadoConsulta.isFirst())
-            {
-                  return true;
-            }
-            else
-            {
-                return false;
-            }
+             return resultadoConsulta.isFirst();
          }
          catch(SQLException e)
          {
-             return false;
+             FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
          }
         
     }
     
-    public Pedidos obtenerPrimero()
+    public Pedidos obtenerPrimero() throws Errores
     {
         
         
@@ -217,12 +222,13 @@ public class GestionarPedidos {
         }
         catch(SQLException e)
         {
-            return null;
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
     }
     
-    public Pedidos obtenerUltimo()
+    public Pedidos obtenerUltimo() throws Errores
     {
         try{
             if(resultadoConsulta.last())
@@ -250,12 +256,13 @@ public class GestionarPedidos {
         }
         catch(SQLException e)
         {
-            return null;
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
     }
     
-    public int modificarPedido(Pedidos pedido)
+    public int modificarPedido(Pedidos pedido) throws Errores
     {
         
         
@@ -271,19 +278,21 @@ public class GestionarPedidos {
             
            
             resultadoConsulta.updateRow();
-            
+           
+            //mirar como devuelve cuantas filas actualizadas
             return 1;
             
         }
         catch(SQLException e)
         {
-            return 0;
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
         
     }
     
-   public int inserccionPedido(Pedidos ped)
+   public int inserccionPedido(Pedidos ped) throws Errores
    {
        try
         {
@@ -303,13 +312,16 @@ public class GestionarPedidos {
             resultadoConsulta.updateDate(4, fechaBase);
             
             resultadoConsulta.insertRow();
-            resultadoConsulta.last();//coloco el resultset al final
+            resultadoConsulta.first();//coloco el resultset al principio
+            
+            //mirar como devuelve cuantas filas actualizadas
             return 1;
             
         }
         catch(SQLException e)
         {
-            return 0;
+           FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
         }
         
        

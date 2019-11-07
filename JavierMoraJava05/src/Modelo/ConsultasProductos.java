@@ -1,6 +1,7 @@
 
 package Modelo;
 
+import Controlador.Errores;
 import Controlador.GestionarOperaciones;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class ConsultasProductos {
         return consulasProductos;
     }
 
-    public Object obtenerResultadoSelectComposicion() throws SQLException
+    public Object obtenerResultadoSelectComposicion() throws Errores 
     {
         Object resultado;
         resultado=GestionarOperaciones.todosProductos(consulasProductos);

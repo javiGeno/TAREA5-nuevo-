@@ -1,9 +1,9 @@
 
 package VIsta;
 
+import Controlador.Errores;
 import Modelo.Composicion;
 import Modelo.ConsultasComposicion;
-import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -142,9 +142,9 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
                     
                   }
             }
-            catch(SQLException e)
+            catch(Errores e)
             {
-
+                  JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             }
         
        

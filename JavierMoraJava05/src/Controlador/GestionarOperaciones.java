@@ -22,117 +22,141 @@ public class GestionarOperaciones {
     
    
     
-    public static Object todasComposicionesDePedido(String consulta) throws SQLException
+    public static Object todasComposicionesDePedido(String consulta) throws  Errores
     {
        //si aun no se ha montado el statement
        if(statementTablaComposicion==null)
        {
-           System.out.println("entraaaa");
+           
             statementTablaComposicion= CreacionStatement.getUpdatableStatement();
        }
         
-        ResultSet resultado=statementTablaComposicion.executeQuery(consulta);
-       
-        int numeroFilasConsulta=cantidadFilas(resultado);
-        
-        if(numeroFilasConsulta>1)
-        {
-            ArrayList <Composicion> filasObtenidas = new ArrayList<Composicion>();
-            
-            
-            while(resultado.next())
+       try
+       {
+            ResultSet resultado=statementTablaComposicion.executeQuery(consulta);
+
+            int numeroFilasConsulta=cantidadFilas(resultado);
+
+            if(numeroFilasConsulta>1)
             {
-                Composicion nueva=rellenaCompo(resultado);
-                
-                filasObtenidas.add(nueva);
-                
-            }
-            
-            resultado.close();
-            return filasObtenidas;
-                
-        }
-        else
-        {
-              if(numeroFilasConsulta==1)
-              {
-                Composicion filaObtenida;
+                ArrayList <Composicion> filasObtenidas = new ArrayList<Composicion>();
 
-                resultado.first();
 
-               
-                filaObtenida=rellenaCompo(resultado);
-               
+                while(resultado.next())
+                {
+                    Composicion nueva=rellenaCompo(resultado);
+
+                    filasObtenidas.add(nueva);
+
+                }
+
                 resultado.close();
-                return filaObtenida;
-              }
-              else
-              {
-                  //no hay composiciones en el pedido
-                  return null;
-              }
-        }
-        
+                return filasObtenidas;
+
+            }
+            else
+            {
+                  if(numeroFilasConsulta==1)
+                  {
+                    Composicion filaObtenida;
+
+                    resultado.first();
+
+
+                    filaObtenida=rellenaCompo(resultado);
+
+                    resultado.close();
+                    return filaObtenida;
+                  }
+                  else
+                  {
+                      //no hay composiciones en el pedido
+                      return null;
+                  }
+            }
+       }
+       catch(SQLException e)
+       {
+           FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+       }
+
         
         
     }
     
-    public static Object todosProductos(String consulta) throws SQLException
+    public static Object todosProductos(String consulta) throws Errores
     {
         
         statementTablaProducto= CreacionStatement.getSimpleStatement();
         
-        ResultSet resultado=statementTablaProducto.executeQuery(consulta);
-        
-        int numeroFilasConsulta=cantidadFilas(resultado);
-        
-        if(numeroFilasConsulta>1)
+        try
         {
-            ArrayList <Productos> filasObtenidas = new ArrayList<Productos>();
-            Productos nueva;
-            
-            
-            while(resultado.next())
+            ResultSet resultado=statementTablaProducto.executeQuery(consulta);
+
+            int numeroFilasConsulta=cantidadFilas(resultado);
+
+            if(numeroFilasConsulta>1)
             {
-                Productos nuevo=rellenaProducto(resultado);
-                
-                filasObtenidas.add(nuevo);
-                
-            }
-            
-            resultado.close();
-            return filasObtenidas;
-                
-        }
-        else
-        {
-              
-                Productos filaObtenida;
+                ArrayList <Productos> filasObtenidas = new ArrayList<Productos>();
+                Productos nueva;
 
-                resultado.first();
 
-                filaObtenida=rellenaProducto(resultado);
+                while(resultado.next())
+                {
+                    Productos nuevo=rellenaProducto(resultado);
+
+                    filasObtenidas.add(nuevo);
+
+                }
 
                 resultado.close();
-                return filaObtenida;
+                return filasObtenidas;
+
+            }
+            else
+            {
+
+                    Productos filaObtenida;
+
+                    resultado.first();
+
+                    filaObtenida=rellenaProducto(resultado);
+
+                    resultado.close();
+                    return filaObtenida;
+            }
         }
-        
+        catch(SQLException e)
+        {
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
+
         
         
     }
     
     
-    public static int insertarComposicion(String sentencia) throws SQLException
+    public static int insertarComposicion(String sentencia) throws Errores
     {
         //si aun no se ha montado el statement
         if(statementTablaComposicion==null)
         {
-            System.out.println("entraaaa");
+            
              statementTablaComposicion= CreacionStatement.getUpdatableStatement();
         }
            
          
-        int resultado=statementTablaProducto.executeUpdate(sentencia);
+        int resultado;
+        try {
+            
+            resultado = statementTablaProducto.executeUpdate(sentencia);
+        
+        } catch (SQLException ex) {
+            FileModif.escribir(ex.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
         
          
          return resultado;
@@ -150,38 +174,62 @@ public class GestionarOperaciones {
     
     
     
-    private static Productos rellenaProducto(ResultSet resultado) throws SQLException
+    private static Productos rellenaProducto(ResultSet resultado) throws Errores 
     {
         Productos filaObtenida = new Productos();
         
-        filaObtenida.setCodigoProducto(resultado.getInt(1));
-        filaObtenida.setPrecioSinIva(resultado.getFloat(2));
-        filaObtenida.setDescripcion(resultado.getString(3));
-        filaObtenida.setCategoria(resultado.getString(4));
+        try
+        {
+            filaObtenida.setCodigoProducto(resultado.getInt(1));
+            filaObtenida.setPrecioSinIva(resultado.getFloat(2));
+            filaObtenida.setDescripcion(resultado.getString(3));
+            filaObtenida.setCategoria(resultado.getString(4));
+        }
+        catch(SQLException e)
+        {
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
         
         return filaObtenida;
     }
     
    
-    private static Composicion rellenaCompo(ResultSet resultado) throws SQLException
+    private static Composicion rellenaCompo(ResultSet resultado) throws Errores 
     {
         Composicion filaObtenida = new Composicion();
         
-        filaObtenida.setPedComposicion(resultado.getInt(1));
-        filaObtenida.setProComposicion(resultado.getInt(2));
-        filaObtenida.setCantidad(resultado.getInt(3));
-        filaObtenida.setPrecioConIva(resultado.getFloat(4));
+        try
+        {
+            filaObtenida.setPedComposicion(resultado.getInt(1));
+            filaObtenida.setProComposicion(resultado.getInt(2));
+            filaObtenida.setCantidad(resultado.getInt(3));
+            filaObtenida.setPrecioConIva(resultado.getFloat(4));
+        }
+        catch(SQLException e)
+        {
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
         
         return filaObtenida;
     }
     
-    private static int cantidadFilas(ResultSet result) throws SQLException 
+    private static int cantidadFilas(ResultSet result) throws Errores  
     {
         int numFilas;
         
-        result.last();
-        numFilas=result.getRow();
-        result.beforeFirst();
+        try
+        {
+            result.last();
+            numFilas=result.getRow();
+            result.beforeFirst();
+        }
+        catch(SQLException e)
+        {
+            FileModif.escribir(e.getMessage());
+            throw new Errores(Errores.ERRORES_BD);
+        }
         
         
         return numFilas;

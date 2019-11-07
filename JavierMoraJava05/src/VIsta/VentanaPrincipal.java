@@ -2,9 +2,12 @@
 package VIsta;
 
 import Controlador.ConexionValidacion;
+import Controlador.Errores;
 import Controlador.FileModif;
 import java.awt.Color;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 
@@ -30,8 +33,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     jPanelConexion=new Conexion(this);
     jPanelComponerPedido=new ComponerPedido(this);
     
-    //abrimos el fichero de los posibles errores
-    FileModif.abrirFichero();
+    
     
     
     reset();
@@ -117,7 +119,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             {
                 
                 reset();
-                ConexionValidacion.cerrarConexion();
+                try {
+                    ConexionValidacion.cerrarConexion();
+                } catch (Errores ex) {
+                    
+                    JOptionPane.showMessageDialog(null, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                }
                 
             }
         }
@@ -165,7 +172,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             public void run() {
                 new VentanaPrincipal().setVisible(true);
                 
-                FileModif.cerrarFichero();
+                
             }
         });
     }
@@ -181,14 +188,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     public void  conexionBaseDato() 
     {
-        if(ConexionValidacion.realizarConexionPostgres() && ConexionValidacion.realizarConexionMysql())
+        try
         {
-            System.out.println("La conexion ha sido correcta");
+            if(ConexionValidacion.realizarConexionPostgres() && ConexionValidacion.realizarConexionMysql())
+            {
+                System.out.println("La conexion ha sido correcta");
+            }
         }
-        else
+        catch(Errores e)
         {
-            System.out.println("Ha ocurrido un problema con la base de datos");
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         
     }

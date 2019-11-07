@@ -3,6 +3,7 @@ package VIsta;
 
 import Controlador.*;
 import Modelo.Pedidos;
+import com.aeat.valida.Validador;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.io.*;
@@ -10,6 +11,8 @@ import java.nio.file.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -53,6 +56,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         jButtonComposicion = new javax.swing.JButton();
         jButtonCambioImagen = new javax.swing.JButton();
         jButtonGuardarCambios = new javax.swing.JButton();
+        jButtonValidarDNI = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
@@ -75,7 +79,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
 
         jLabelDireccion.setText("DIRECCIÓN");
 
-        jLabelFechaIncor.setText("FECHA INCORPORACIÓN");
+        jLabelFechaIncor.setText("FECHA PEDIDO");
 
         jLabelCodigoCliente.setText("CÓDIGO CLIENTE");
 
@@ -132,16 +136,17 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             }
         });
 
+        jButtonValidarDNI.setText("check NIF");
+        jButtonValidarDNI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonValidarDNIActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonCambioImagen))
-                .addGap(50, 50, 50))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -157,6 +162,17 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                         .addGap(283, 283, 283)
                         .addComponent(jButtonGuardarCambios)))
                 .addContainerGap(78, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonCambioImagen))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonValidarDNI)
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -174,7 +190,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                                 .addComponent(jTextFieldDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                                 .addComponent(jTextFieldCodigoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                                 .addComponent(jDatePickerFechaPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                    .addContainerGap(375, Short.MAX_VALUE)))
+                    .addContainerGap(438, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +212,9 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonSig, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(107, 107, 107))))
+                        .addGap(70, 70, 70)
+                        .addComponent(jButtonValidarDNI)
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(61, 61, 61)
@@ -234,20 +252,36 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     private void jButtonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasActionPerformed
 
         
-        pedidoActual=gestionPedidos.obtenerAnteriorPed();
+       try {
+           pedidoActual=gestionPedidos.obtenerAnteriorPed();
+        
         actualizarCampos();
         actualizarBotones();
         actualizar_imagen();
         resetComposiciones();
+       }
+       catch (Errores ex) {
+          
+           JOptionPane.showMessageDialog(null, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+
+       }
     }//GEN-LAST:event_jButtonAtrasActionPerformed
 
     private void jButtonSigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSigActionPerformed
 
-        pedidoActual=gestionPedidos.obtenerSigPed();
-        actualizarCampos();
-        actualizarBotones();
-        actualizar_imagen();
-        resetComposiciones();
+        try
+        {
+            pedidoActual=gestionPedidos.obtenerSigPed();
+            actualizarCampos();
+            actualizarBotones();
+            actualizar_imagen();
+            resetComposiciones();
+        }
+        catch(Errores e)
+        {
+           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+
+        }
     }//GEN-LAST:event_jButtonSigActionPerformed
 
     private void jButtonAñadirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirProductoActionPerformed
@@ -291,10 +325,18 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         {
             //copiamos la imagen
             guardarEnCarpetaImagenes();
-            //afecta a la base de datos
-            gestionPedidos.modificarPedido(pedidoActual);
-            camposSinActualizar();
-            JOptionPane.showMessageDialog(null, "Pedido actualizado", "GUARDAR CAMBIOS", JOptionPane.WARNING_MESSAGE);
+            
+            try
+            {
+                //afecta a la base de datos
+                gestionPedidos.modificarPedido(pedidoActual);
+                camposSinActualizar();
+                JOptionPane.showMessageDialog(null, "Pedido actualizado", "GUARDAR CAMBIOS", JOptionPane.WARNING_MESSAGE);
+            }
+            catch(Errores e)
+            {
+                JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+            }
         }
         else
         {
@@ -302,6 +344,21 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         }
         
     }//GEN-LAST:event_jButtonGuardarCambiosActionPerformed
+
+    private void jButtonValidarDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidarDNIActionPerformed
+       try 
+       {
+           validarDNI();
+           
+           JOptionPane.showMessageDialog(null, "El dni se ha validado correctamente" , "DNI", JOptionPane.INFORMATION_MESSAGE);
+
+           
+       } catch (Errores e)
+       {
+           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+
+       }
+    }//GEN-LAST:event_jButtonValidarDNIActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -311,6 +368,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     private javax.swing.JButton jButtonComposicion;
     private javax.swing.JButton jButtonGuardarCambios;
     private javax.swing.JButton jButtonSig;
+    private javax.swing.JButton jButtonValidarDNI;
     private org.jdatepicker.JDatePicker jDatePickerFechaPedido;
     private javax.swing.JFileChooser jFileChooserImagen;
     private javax.swing.JLabel jLabelCodigoCliente;
@@ -331,9 +389,10 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         {
             gestionPedidos=new GestionarPedidos(venP.getNombreUsuario());
         }
-        catch(SQLException e)
+        catch(Errores e)
         {
-           
+           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+
         }
     }
         
@@ -347,7 +406,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         }
     }
     
-    public void reset()
+    public void reset() throws Errores
     {
         pedidoActual=gestionPedidos.obtenerPrimero();
         actualizarCampos();
@@ -374,6 +433,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             jTextFieldCodigoPostal.setText("");
             jTextFieldDireccion.setText("");
             jTextFieldNumeroPedido.setText("");
+            jDatePickerFechaPedido.getFormattedTextField().setText("");
          }
          else
          {
@@ -390,7 +450,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     
     
     
-    private void actualizarBotones()
+    private void actualizarBotones() throws Errores
     {
         
         
@@ -402,6 +462,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             jButtonComposicion.setEnabled(false);
             jButtonGuardarCambios.setEnabled(false);
             jButtonSig.setEnabled(false);
+            jButtonValidarDNI.setEnabled(false);
         }
         else
         {
@@ -412,6 +473,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                 jButtonCambioImagen.setEnabled(true);
                 jButtonComposicion.setEnabled(true);
                 jButtonGuardarCambios.setEnabled(true);
+                jButtonValidarDNI.setEnabled(true);
                 jButtonSig.setEnabled(false);
                 
             }
@@ -425,6 +487,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                     jButtonComposicion.setEnabled(true);
                     jButtonGuardarCambios.setEnabled(true);
                     jButtonSig.setEnabled(true);
+                    jButtonValidarDNI.setEnabled(true);
                 }
                 else
                 {
@@ -435,6 +498,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                         jButtonCambioImagen.setEnabled(true);
                         jButtonComposicion.setEnabled(true);
                         jButtonGuardarCambios.setEnabled(true);
+                        jButtonValidarDNI.setEnabled(true);
                         jButtonSig.setEnabled(false);
                     }
                     else
@@ -444,6 +508,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
                         jButtonCambioImagen.setEnabled(true);
                         jButtonComposicion.setEnabled(true);
                         jButtonGuardarCambios.setEnabled(true);
+                        jButtonValidarDNI.setEnabled(true);
                         jButtonSig.setEnabled(true);
                         
                     }
@@ -586,7 +651,25 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         venP.getjPanelComponerPedido().montarListaProductos();
     }
         
-      
+    private void validarDNI() throws Errores      
+    {
+        Validador checkeoDNI;
+        checkeoDNI=new Validador();
+        int resultado;
+        String nif=pedidoActual.getNif();
+        nif=nif.toUpperCase();
+        resultado=checkeoDNI.checkNif(nif);
+        
+        System.out.println(resultado);
+        
+        if(resultado<0)
+        {
+            throw new Errores(Errores.NIF_NO_REGISTRADO);
+        }
+        
+        
+    }  
+    
 }
 
     
