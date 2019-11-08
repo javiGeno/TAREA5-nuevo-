@@ -173,12 +173,12 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
             }
             else//si no hay ninguna composicion
             {
-                int afirmacion=JOptionPane.showConfirmDialog(null, "No tiene articulos, ¿Quiere añadir alguno?", "COMPOSICIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
+                int afirmacion=JOptionPane.showConfirmDialog(venP, "No tiene articulos, ¿Quiere añadir alguno?", "COMPOSICIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
                
                 
                     if(afirmacion==0)
                     {
-                       venP.getjPanelVerPedidos().instruccionesParaInsertarProducto();
+                       venP.getjPanelVerPedidos().instruccionesParaInsertarProducto(1);
                     }
             }
         }

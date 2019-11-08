@@ -176,12 +176,15 @@ public class InsertarPedido extends javax.swing.JPanel {
             try {
                 
                 pediInsertado = venP.getjPanelVerPedidos().getGestionPedidos().inserccionPedido(ped);
-                JOptionPane.showMessageDialog(this, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(venP, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.INFORMATION_MESSAGE);
+                
                 
                 //mostramos pedidos
-                venP.getjPanelVerPedidos().reset();
-                venP.getjPanelVerPedidos().setPedidoActual(ped);
                 venP.cambioDePanel(venP.getjPanelVerPedidos());
+                //Reseteamos porque el resultSer se ha vuelto a iniciar para poder ver los cambios
+                venP.getjPanelVerPedidos().reset();
+                
+                
                 reset();
             
             } catch (Errores e) {
@@ -302,15 +305,15 @@ public class InsertarPedido extends javax.swing.JPanel {
         
         if(pedActual==null)
         {
-            nif=JOptionPane.showInputDialog(this, "Introduce su dni", "NUEVO DNI", JOptionPane.INFORMATION_MESSAGE);
+            nif=JOptionPane.showInputDialog(venP, "Introduce su dni", "NUEVO DNI", JOptionPane.INFORMATION_MESSAGE);
         
-            if(nif==null)
+            if(nif.length()>9)
             {
-                System.out.println(nif);
-            }
-            else
-            {
-                System.out.println(nif);
+                Errores e;
+                e=new Errores(Errores.MUCHOS_CARACTERES);
+                JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                FileModif.escribir(e.getError()+": "+e.mostrarError()); 
+                nif=null;
             }
             
             return nif;

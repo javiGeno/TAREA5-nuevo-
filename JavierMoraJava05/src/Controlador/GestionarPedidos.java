@@ -315,6 +315,8 @@ public class GestionarPedidos {
             
             //se cargan de nuevo los datos
             creacionResultSet();
+            //Volvemos a calcular numero de filas
+            calcularFilasPedidos();
             //mirar como devuelve cuantas filas actualizadas
             return 1;
             

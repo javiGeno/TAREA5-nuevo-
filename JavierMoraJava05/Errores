@@ -47,3 +47,17 @@ Fri Nov 08 01:09:11 PST 2019 1: La fecha no puede ser superior a la actual
 Fri Nov 08 01:09:18 PST 2019 1: La fecha no puede ser superior a la actual
 Fri Nov 08 01:09:22 PST 2019 1: La fecha no puede ser superior a la actual
 Fri Nov 08 01:16:28 PST 2019 2: El nif no es invalido
+Fri Nov 08 03:24:18 PST 2019 1: La fecha no puede ser superior a la actual
+Fri Nov 08 03:24:48 PST 2019 Cannot update the ResultSet because it is either before the start or after the end of the results.
+Fri Nov 08 03:25:08 PST 2019 Cannot update the ResultSet because it is either before the start or after the end of the results.
+Fri Nov 08 03:25:31 PST 2019 Cannot update the ResultSet because it is either before the start or after the end of the results.
+Fri Nov 08 03:26:43 PST 2019 Cannot update the ResultSet because it is either before the start or after the end of the results.
+Fri Nov 08 03:34:14 PST 2019 Cannot update the ResultSet because it is either before the start or after the end of the results.
+Fri Nov 08 03:41:14 PST 2019 1: La fecha no puede ser superior a la actual
+Fri Nov 08 03:41:57 PST 2019 5: 5: Demasiados caracteres
+Fri Nov 08 04:00:07 PST 2019 5: 5: Demasiados caracteres
+Fri Nov 08 04:00:18 PST 2019 ERROR: value too long for type character varying(9)
+Fri Nov 08 04:12:37 PST 2019 5: 5: Demasiados caracteres
+Fri Nov 08 04:54:49 PST 2019 5: 5: Demasiados caracteres
+Fri Nov 08 04:56:52 PST 2019 1: La fecha no puede ser superior a la actual
+Fri Nov 08 04:56:58 PST 2019 1: La fecha no puede ser superior a la actual

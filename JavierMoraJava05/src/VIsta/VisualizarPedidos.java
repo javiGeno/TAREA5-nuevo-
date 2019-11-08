@@ -302,7 +302,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
        /*las tengo en un metodo, porque tambien vy a llamarlo, en el caso de que el pedido
         no tenga composiciones y el usuario acepte en la ventana emergente el querer insertar alguno
         */
-        instruccionesParaInsertarProducto();
+        instruccionesParaInsertarProducto(venP.getjPanelVerComposicion().getCantidadComposiciones()+1);
     }//GEN-LAST:event_jButtonAñadirProductoActionPerformed
 
     private void jButtonComposicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonComposicionActionPerformed
@@ -336,22 +336,32 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         
         if(fechaActualizada==true || imagenActualizada==true)
         {
-            //copiamos la imagen
-            guardarEnCarpetaImagenes();
-
+         
             try
             {
-                //afecta a la base de datos
-                gestionPedidos.modificarPedido(pedidoActual);
+                
               
                 if(fechaActualizada==true && imagenActualizada==true)
+                {
                     JOptionPane.showMessageDialog(this, "Foto y fecha actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
+                    //copiamos la imagen
+                    guardarEnCarpetaImagenes();
+                }
                 if(fechaActualizada==false && imagenActualizada==true)
+                {
+                    //copiamos la imagen
+                    guardarEnCarpetaImagenes();
                     JOptionPane.showMessageDialog(this, "Foto actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
+                }
                 if(fechaActualizada==true && imagenActualizada==false)
                     JOptionPane.showMessageDialog(this, "Fecha actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
                
+                //afecta a la base de datos
+                gestionPedidos.modificarPedido(pedidoActual);
+                
                 camposSinActualizar();
+                //volvemos al primer pedido porque el resultSet se ha vuelto a iniciar para poder ver los cambios
+                reset();
             }
             catch(Errores e)
             {
@@ -436,7 +446,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         if(pedidoActual==null)
         {
             //si el primer pedido es nulo no hay pedidos
-            JOptionPane.showMessageDialog(this, "Pedidos no encontrado", "No tiene pedidos registrados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(venP, "Pedidos no encontrado", "No tiene pedidos registrados", JOptionPane.WARNING_MESSAGE);
         }
        
         //resetea el panel de las composiciones del pedido
@@ -666,12 +676,12 @@ public class VisualizarPedidos extends javax.swing.JPanel {
     
     
 
-    public void instruccionesParaInsertarProducto() 
+    public void instruccionesParaInsertarProducto(int cant) 
     {
         venP.cambioDePanel(venP.getjPanelComponerPedido());
         int numPed=pedidoActual.getNumeroPedido();
         //obtenemos el numero de composiciones que tiene el pedido y sumamos uno
-        int cantidadPedido=venP.getjPanelVerComposicion().getCantidadComposiciones()+1;
+        int cantidadPedido=cant;
         //pasamos el numero de pedido y la cantidad para escribirla en los textField correspondientes
         venP.getjPanelComponerPedido().actualizarDatosPedido(numPed, cantidadPedido);
         venP.getjPanelComponerPedido().montarListaProductos();
