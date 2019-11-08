@@ -134,7 +134,7 @@ public class Conexion extends javax.swing.JPanel {
         }
         catch(Errores e)
         {
-            JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(venP, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             reset();
         }
         

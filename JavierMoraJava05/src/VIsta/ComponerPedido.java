@@ -186,7 +186,7 @@ public class ComponerPedido extends javax.swing.JPanel {
 
                 filaInsertada=consultasCompo.inserccionComposicion(cantidad,precioConIva, produc);
                 
-                JOptionPane.showMessageDialog(null, filaInsertada+" articulo añadido", "ARTICULO AÑADIDO" , JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(venP, filaInsertada+" articulo añadido", "ARTICULO AÑADIDO" , JOptionPane.INFORMATION_MESSAGE);
                //reseteamos la vista de composiciones
                 venP.getjPanelVerPedidos().resetComposiciones();
                 //mostramos las composiciones que tiene

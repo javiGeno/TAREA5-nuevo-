@@ -114,7 +114,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             
         if(jMenuConexion.getForeground()==Color.GREEN)
         {
-            int yes=JOptionPane.showConfirmDialog(null, "¿Desea desconectarse?");
+            int yes=JOptionPane.showConfirmDialog(this, "¿Desea desconectarse?");
             if(yes==0)
             {
                 
@@ -123,7 +123,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     ConexionValidacion.cerrarConexion();
                 } catch (Errores ex) {
                     
-                    JOptionPane.showMessageDialog(null, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
                 }
                 
             }
@@ -197,7 +197,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         catch(Errores e)
         {
-            JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         
     }

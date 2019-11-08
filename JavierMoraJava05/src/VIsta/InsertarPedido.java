@@ -307,13 +307,16 @@ public class InsertarPedido extends javax.swing.JPanel {
         {
             nif=JOptionPane.showInputDialog(venP, "Introduce su dni", "NUEVO DNI", JOptionPane.INFORMATION_MESSAGE);
         
-            if(nif.length()>9)
+            if(nif!=null)
             {
-                Errores e;
-                e=new Errores(Errores.MUCHOS_CARACTERES);
-                JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
-                FileModif.escribir(e.getError()+": "+e.mostrarError()); 
-                nif=null;
+                if(nif.length()>9)
+                {
+                    Errores e;
+                    e=new Errores(Errores.MUCHOS_CARACTERES);
+                    JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                    FileModif.escribir(e.getError()+": "+e.mostrarError()); 
+                    nif=null;
+                }
             }
             
             return nif;
