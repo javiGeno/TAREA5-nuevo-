@@ -243,9 +243,22 @@ public class VisualizarPedidos extends javax.swing.JPanel {
 
     private void jDatePickerFechaPedidodatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePickerFechaPedidodatePickerActionPerformed
         
-        pedidoActual.setFechaPedido(obtenerFechaGregorian());
-        fechaActualizada=true; 
+        GregorianCalendar fechaExtraida=obtenerFechaGregorian();
         
+        if(fechaValida(fechaExtraida))
+        {
+            
+            pedidoActual.setFechaPedido(fechaExtraida);
+            fechaActualizada=true; 
+        }
+        else
+        {
+             
+            Errores e;
+            e=new Errores(Errores.FECHA_NO_VALIDA);
+            JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+            FileModif.escribir(e.mostrarError()); 
+        }
         
     }//GEN-LAST:event_jDatePickerFechaPedidodatePickerActionPerformed
 
@@ -279,7 +292,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         }
         catch(Errores e)
         {
-           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+           JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
 
         }
     }//GEN-LAST:event_jButtonSigActionPerformed
@@ -325,22 +338,29 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         {
             //copiamos la imagen
             guardarEnCarpetaImagenes();
-            
+
             try
             {
                 //afecta a la base de datos
                 gestionPedidos.modificarPedido(pedidoActual);
+              
+                if(fechaActualizada==true && imagenActualizada==true)
+                    JOptionPane.showMessageDialog(this, "Foto y fecha actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
+                if(fechaActualizada==false && imagenActualizada==true)
+                    JOptionPane.showMessageDialog(this, "Foto actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
+                if(fechaActualizada==true && imagenActualizada==false)
+                    JOptionPane.showMessageDialog(this, "Fecha actualizada", "GUARDAR CAMBIOS", JOptionPane.INFORMATION_MESSAGE);
+               
                 camposSinActualizar();
-                JOptionPane.showMessageDialog(null, "Pedido actualizado", "GUARDAR CAMBIOS", JOptionPane.WARNING_MESSAGE);
             }
             catch(Errores e)
             {
-                JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "Los datos no han sido modificados", "GUARDAR CAMBIOS", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Los datos no han sido modificados", "GUARDAR CAMBIOS", JOptionPane.WARNING_MESSAGE);
         }
         
     }//GEN-LAST:event_jButtonGuardarCambiosActionPerformed
@@ -350,13 +370,13 @@ public class VisualizarPedidos extends javax.swing.JPanel {
        {
            validarDNI();
            
-           JOptionPane.showMessageDialog(null, "El dni se ha validado correctamente" , "DNI", JOptionPane.INFORMATION_MESSAGE);
+           JOptionPane.showMessageDialog(this, "El dni se ha validado correctamente" , "DNI", JOptionPane.INFORMATION_MESSAGE);
 
            
        } catch (Errores e)
        {
-           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
-
+           JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+           FileModif.escribir(e.mostrarError()); 
        }
     }//GEN-LAST:event_jButtonValidarDNIActionPerformed
 
@@ -391,7 +411,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         }
         catch(Errores e)
         {
-           JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+           JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
 
         }
     }
@@ -416,7 +436,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         if(pedidoActual==null)
         {
             //si el primer pedido es nulo no hay pedidos
-            JOptionPane.showMessageDialog(null, "Pedidos no encontrado", "No tiene pedidos registrados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Pedidos no encontrado", "No tiene pedidos registrados", JOptionPane.WARNING_MESSAGE);
         }
        
         //resetea el panel de las composiciones del pedido
@@ -593,7 +613,7 @@ public class VisualizarPedidos extends javax.swing.JPanel {
             {
                 //creamos una imagen icon a partir de la ruta que tiene el objeto 
                 ImageIcon imagenCarpeta=new ImageIcon(pedidoActual.getRutaFoto());
-                
+                System.out.println(pedidoActual.getRutaFoto());
                 
                 //si no hay imagenes en esa ruta, colocamos texto
                 if(imagenCarpeta.getImageLoadStatus()== MediaTracker.ERRORED)
@@ -675,6 +695,19 @@ public class VisualizarPedidos extends javax.swing.JPanel {
         
         
     }  
+
+    private boolean fechaValida(GregorianCalendar fechaExtraida) 
+    {
+        Date date=fechaExtraida.getTime();
+        Date fechaActual=new Date();
+        
+        if(date.after(fechaActual))
+        {
+            return false;
+        }
+        
+        return true;
+    }
     
 }
 

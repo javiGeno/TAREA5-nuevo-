@@ -24,17 +24,16 @@ public class GestionarOperaciones {
     
     public static Object todasComposicionesDePedido(String consulta) throws  Errores
     {
-       //si aun no se ha montado el statement
-       if(statementTablaComposicion==null)
-       {
+       
            
-            statementTablaComposicion= CreacionStatement.getUpdatableStatement();
-       }
+       statementTablaComposicion= CreacionStatement.getUpdatableStatement();
+       
         
        try
        {
             ResultSet resultado=statementTablaComposicion.executeQuery(consulta);
-
+            
+            
             int numeroFilasConsulta=cantidadFilas(resultado);
 
             if(numeroFilasConsulta>1)
@@ -65,6 +64,8 @@ public class GestionarOperaciones {
 
                     filaObtenida=rellenaCompo(resultado);
 
+                      
+                    
                     resultado.close();
                     return filaObtenida;
                   }
@@ -140,18 +141,18 @@ public class GestionarOperaciones {
     
     public static int insertarComposicion(String sentencia) throws Errores
     {
-        //si aun no se ha montado el statement
-        if(statementTablaComposicion==null)
-        {
+        
             
-             statementTablaComposicion= CreacionStatement.getUpdatableStatement();
-        }
+        statementTablaComposicion= CreacionStatement.getUpdatableStatement();
+        
            
          
         int resultado;
         try {
             
             resultado = statementTablaProducto.executeUpdate(sentencia);
+            
+            statementTablaProducto.close();
         
         } catch (SQLException ex) {
             FileModif.escribir(ex.getMessage());
@@ -205,6 +206,7 @@ public class GestionarOperaciones {
             filaObtenida.setProComposicion(resultado.getInt(2));
             filaObtenida.setCantidad(resultado.getInt(3));
             filaObtenida.setPrecioConIva(resultado.getFloat(4));
+            
         }
         catch(SQLException e)
         {

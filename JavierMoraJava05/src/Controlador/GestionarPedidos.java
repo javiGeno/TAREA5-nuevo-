@@ -276,7 +276,9 @@ public class GestionarPedidos {
             
            
             resultadoConsulta.updateRow();
-           
+          
+            //se cargan denuevo los datos
+            creacionResultSet();
             //mirar como devuelve cuantas filas actualizadas
             return 1;
             
@@ -311,6 +313,7 @@ public class GestionarPedidos {
             
             resultadoConsulta.insertRow();
             
+            //se cargan de nuevo los datos
             creacionResultSet();
             //mirar como devuelve cuantas filas actualizadas
             return 1;

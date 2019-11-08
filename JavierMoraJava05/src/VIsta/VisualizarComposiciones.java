@@ -120,6 +120,7 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
             try
             {
                 Object composicionesPedido=resultadoComposiciones.obtenerResultadoSelectComposicion();
+               
                 //si hay composiciones en ese pedido se comprueba cuants y se hace el tratamiento
                 
                 if(composicionesPedido!=null)
@@ -132,18 +133,17 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
                         }
                         else
                         {
+                            
                                composicion=new Composicion();
                                composicion=(Composicion) composicionesPedido;
                                cantidadComposiciones=1;
                         }
                  }
-                 else//preguntamos si quiere insertar alguna
-                 {
-                    
-                  }
+                 
             }
             catch(Errores e)
             {
+                
                   JOptionPane.showMessageDialog(null, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
             }
         
@@ -160,12 +160,13 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
         
         
         
-        //si la lista es nula quiere decir que solo hay 1 fila
+        //si la lista es nula quiere decir que solo hay 1 fila o ninguna
         if(composiciones==null)
         {
             //si composicion tampoco es nula
             if(composicion!=null)
             {
+                
                 //se añade un array que equivaldria a una fila de datos de la tabla composicion
                 datosTabla.addRow(obtenerFilaDatos(composicion));
                 jTable1.setModel(datosTabla);
@@ -210,6 +211,9 @@ public class VisualizarComposiciones extends javax.swing.JPanel {
     //borra las filas de la tabla a la espera de volverla a llenar de datos segun el pedido
     public void resetTable()
     {
+        //se resetean los dos objetos para que no se altere la muestra de datos
+        composicion=null;
+        composiciones=null;
         datosTabla.setRowCount(0);
     }
     

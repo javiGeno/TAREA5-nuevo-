@@ -13,6 +13,7 @@ public class CodigoErrores {
             case 2: return "El nif no es invalido";
             case 3: return "Error en la base de datos";
             case 4: return "Datos incorrectos";
+            case 5: return "Demasiados caracteres";
             default: return "";
         
         

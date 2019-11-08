@@ -3,7 +3,6 @@ package Modelo;
 
 import Controlador.Errores;
 import Controlador.GestionarOperaciones;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -38,13 +37,16 @@ public class ConsultasComposicion {
         if(resultado instanceof ArrayList)
         {
             listaCompo=(ArrayList<Composicion>) resultado;
+            return listaCompo;
         }
         else
         {
+            
             compo=(Composicion) resultado;
+            return compo;
         }
         
-        return resultado;
+        
     }
 
     public String getConsultasInsertComposicion(int cant, float precIva, int pro) {

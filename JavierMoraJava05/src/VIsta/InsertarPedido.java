@@ -3,6 +3,7 @@ package VIsta;
 
 import Controlador.ConexionValidacion;
 import Controlador.Errores;
+import Controlador.FileModif;
 import Modelo.Pedidos;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -175,21 +176,20 @@ public class InsertarPedido extends javax.swing.JPanel {
             try {
                 
                 pediInsertado = venP.getjPanelVerPedidos().getGestionPedidos().inserccionPedido(ped);
-                JOptionPane.showMessageDialog(this, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, pediInsertado+" pedido creado", "INSERCCIÓN PEDIDO", JOptionPane.INFORMATION_MESSAGE);
                 
                 //mostramos pedidos
                 venP.getjPanelVerPedidos().reset();
                 venP.getjPanelVerPedidos().setPedidoActual(ped);
                 venP.cambioDePanel(venP.getjPanelVerPedidos());
+                reset();
             
             } catch (Errores e) {
                  JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
 
             }
+           
             
-            
-            
-            reset();
         }
         else
         {
@@ -256,49 +256,34 @@ public class InsertarPedido extends javax.swing.JPanel {
            
             if(!jTextFieldCodigoPostal.getText().equals("") && !jTextFieldDireccion.getText().equals(""))
             {
-                
-                /*el nif será el mismo que el pedido actual, pertenece al mismo usuario,
-                si no tiene ningun pedido se le pedirá el nif al usuario mediante un mensaje emeregente
-                en caso de que le de a cancelar y devuelva null, el pedido no se efectuara
-                */
-                String nif=obtenerDNI();
-                
-                if(nif!=null)
+                if(buenaEntradaDatos())
                 {
-                    //obtenemos la primary key mas alta y sumamos 1
-                    int numPedido=0;
-                    try {
-                        numPedido = ConexionValidacion.obtencionNumeroPedido()+1;
-                        
-                        String codPos=jTextFieldCodigoPostal.getText();
-                        String direccion=jTextFieldDireccion.getText();
-                        String rutaFoto="";
-                        GregorianCalendar fechaPedido=new GregorianCalendar();
-                        String usuPedido=jTextFieldCodigoCliente.getText();
+                    /*el nif será el mismo que el pedido actual, pertenece al mismo usuario,
+                    si no tiene ningun pedido se le pedirá el nif al usuario mediante un mensaje emeregente
+                    en caso de que le de a cancelar y devuelva null, el pedido no se efectuara
+                    */
+                    String nif=obtenerDNI();
 
-
-                        nuevoPedido=new Pedidos();
-
-                        nuevoPedido.setNumeroPedido(numPedido);
-                        nuevoPedido.setNif(nif);
-                        nuevoPedido.setCodigoPostal(codPos);
-                        nuevoPedido.setDireccion(direccion);
-                        nuevoPedido.setFechaPedido(fechaPedido);
-                        nuevoPedido.setUsuPedidos(usuPedido);
-                        nuevoPedido.setRutaFoto(rutaFoto);
-                        
-                        
-                   
-                    } catch (Errores ex) {
-                        JOptionPane.showMessageDialog(this, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);                       
+                    if(nif!=null)
+                    {
+                            nuevoPedido=nuevoObjeto( nif);
+                           
                     }
-                    
+                    else
+                    {
+                        //no se crea el pedido
+                        return nuevoPedido;
+                    }
                    
+                
+                
                 }
                 else
                 {
-                    //no se crea el pedido
-                    return nuevoPedido;
+                    Errores e;
+                    e=new Errores(Errores.MUCHOS_CARACTERES);
+                    JOptionPane.showMessageDialog(this, e.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE);
+                    FileModif.escribir(e.getError()+": "+e.mostrarError()); 
                 }
             }
             else
@@ -334,6 +319,53 @@ public class InsertarPedido extends javax.swing.JPanel {
         {
             nif=pedActual.getNif();
             return nif;
+        }
+    }
+
+    private boolean buenaEntradaDatos() 
+    {
+        if(jTextFieldCodigoPostal.getText().length()>5 || jTextFieldDireccion.getText().length()>30)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    private Pedidos nuevoObjeto(String nif) 
+    {
+        //obtenemos la primary key mas alta y sumamos 1
+        int numPedido=0;
+        Pedidos nuevoPedido = null;
+        
+        try
+        {
+            numPedido = ConexionValidacion.obtencionNumeroPedido()+1;
+            
+            String codPos=jTextFieldCodigoPostal.getText();
+            String direccion=jTextFieldDireccion.getText();
+            String rutaFoto="";
+            GregorianCalendar fechaPedido=new GregorianCalendar();
+            String usuPedido=jTextFieldCodigoCliente.getText();
+
+
+            nuevoPedido=new Pedidos();
+
+            nuevoPedido.setNumeroPedido(numPedido);
+            nuevoPedido.setNif(nif);
+            nuevoPedido.setCodigoPostal(codPos);
+            nuevoPedido.setDireccion(direccion);
+            nuevoPedido.setFechaPedido(fechaPedido);
+            nuevoPedido.setUsuPedidos(usuPedido);
+            nuevoPedido.setRutaFoto(rutaFoto);
+            
+            return nuevoPedido;
+        
+        } catch (Errores ex) {
+            JOptionPane.showMessageDialog(this, ex.mostrarError(), "ERROR", JOptionPane.WARNING_MESSAGE); 
+            return nuevoPedido;
         }
     }
     
